@@ -638,11 +638,40 @@ html.full main.mods{flex:1;min-height:0}
 #m-notes .kb{display:grid;gap:6px;min-width:0}
 #m-notes .ksh,#m-notes .knum{grid-template-columns:repeat(4,minmax(0,1fr))}
 #m-notes .kext{grid-template-columns:repeat(3,minmax(0,1fr))}
-#m-notes .kb button{height:46px;border:1px solid var(--line);background:var(--raise);border-radius:8px;cursor:pointer;font-family:var(--f-mono);font-size:17px;color:inherit;padding:0 4px;min-width:0;white-space:nowrap;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+#m-notes .kpad{--kh:46px;--kf:1}
+#m-notes .kpad.ks-l{--kh:58px;--kf:1.17}
+#m-notes .kpad.ks-xl{--kh:72px;--kf:1.35}
+#m-notes .kbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+#m-notes .kbar .seg{flex:0 1 auto}
+#m-notes .kbar .seg button{padding:calc(6px*var(--kf)) calc(12px*var(--kf));font-size:calc(14px*var(--kf))}
+#m-notes .kbar .sp{flex:1}
+#m-notes .kbar .btn{min-height:calc(34px*var(--kf));font-size:calc(14px*var(--kf))}
+#m-notes .kbar .btn[aria-pressed="true"]{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+#m-notes .kb button{height:var(--kh);border:1px solid var(--line);background:var(--raise);border-radius:8px;cursor:pointer;font-family:var(--f-mono);font-size:calc(17px*var(--kf));color:inherit;padding:0 4px;min-width:0;white-space:nowrap;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 #m-notes .kb button:hover{border-color:var(--sky)}
 #m-notes .kb button:active{background:var(--sky-soft);transform:translateY(1px)}
-#m-notes .ksh button{font-size:15px;font-weight:500}
-#m-notes .knum button{font-size:19px;font-weight:500}
+#m-notes .ksh button{font-size:calc(15px*var(--kf));font-weight:500}
+#m-notes .knum button{font-size:calc(19px*var(--kf));font-weight:500}
+#m-notes .kkw{grid-template-columns:repeat(5,minmax(0,1fr))}
+#m-notes .kkw button{font-family:var(--f-ui);font-weight:700;font-size:calc(12.5px*var(--kf));padding:0 2px;white-space:normal;line-height:1.05;letter-spacing:.01em}
+#m-notes .kkw button.ar{font-size:calc(22px*var(--kf));font-weight:500;font-family:var(--f-ui)}
+#m-notes .kkw button.w{background:var(--warn-soft);color:var(--warn)}
+#m-notes .kkw button.g{background:var(--ok-soft);color:var(--ok)}
+#m-notes .kpad.tab-kw .ksh,#m-notes .kpad:not(.tab-kw) .kkw{display:none}
+#m-notes .kpad.tab-kw .kgrid{grid-template-columns:minmax(0,5fr) minmax(0,4fr) minmax(0,3fr)}
+#m-notes .kpad.kbmode .knum,#m-notes .kpad.kbmode .kext{display:none}
+#m-notes .kpad.kbmode .kgrid{grid-template-columns:minmax(0,1fr)!important}
+#m-notes .kpad.kbmode .ksh,#m-notes .kpad.kbmode .kkw{grid-template-columns:repeat(auto-fill,minmax(calc(68px*var(--kf)),1fr))}
+#m-notes .kpad.kbmode .kb button{height:calc(var(--kh)*.82)}
+#m-notes .kpad.dock{position:fixed;left:0;right:0;bottom:auto;z-index:40;max-height:48vh;overflow:auto;box-shadow:0 -6px 20px rgba(8,22,40,.2)}
+#m-notes .kstrip button{min-height:calc(38px*var(--kf))}
+#m-notes .kstrip button b{font-size:calc(15px*var(--kf))!important}
+#m-notes .ned .tk.kwc{background:rgba(180,83,9,.28);font-weight:700}
+#m-notes .ned .tk.kwo{background:rgba(31,122,77,.24);font-weight:700}
+#m-notes .ned .tk.kwn{background:rgba(200,40,40,.22);font-weight:700}
+#m-notes .ned .tk.kwi{background:rgba(63,163,242,.16);font-weight:700}
+#m-notes .nrp .it code.chk{background:rgba(180,83,9,.24)}
+#m-notes .nbl .lst .tc{color:var(--warn);font-weight:700}
 #m-notes .kb button.op{background:var(--sky-soft);color:var(--sky-ink);font-weight:600}
 #m-notes .kb button.acc{background:var(--pri);border-color:var(--pri);color:var(--pri-ink);font-weight:600}
 #m-notes .kb button.fn{background:var(--panel);font-family:var(--f-ui);font-size:21px;line-height:1}
@@ -694,8 +723,8 @@ html.full main.mods{flex:1;min-height:0}
   #m-notes .nbl .lst{max-height:50vh}
   #m-notes .ned{--resw:112px}
   #m-notes .kgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  #m-notes .ksh{grid-column:1/-1;order:3}
-  #m-notes .kb button{height:44px}
+  #m-notes .ksh,#m-notes .kkw{grid-column:1/-1;order:3}
+  #m-notes .kpad.tab-kw .kgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   #m-notes .nft .hk{display:none}
   #m-notes .ned textarea,#m-notes .ned .lay{padding-left:12px}
 }
@@ -1560,12 +1589,26 @@ html.full main.mods{flex:1;min-height:0}
       </div>
       <div class="kpad" id="nbPad">
         <div class="kstrip" id="nbStrip" aria-label="Suggestions"></div>
+        <div class="kbar">
+          <div class="seg" role="group" aria-label="Touches" id="nbTab"><button type="button" data-v="s7">S7</button><button type="button" data-v="kw">Mots-clés</button></div>
+          <div class="seg" role="group" aria-label="Taille des touches" id="nbSize"><button type="button" data-v="n" title="Touches normales">A</button><button type="button" data-v="l" title="Grandes touches">A+</button><button type="button" data-v="xl" title="Très grandes touches">A++</button></div>
+          <span class="sp"></span>
+          <button type="button" class="btn" id="nbMode" aria-pressed="false" hidden>⌨ Clavier iPad</button>
+          <button type="button" class="btn" id="nbHide" title="Masquer le pavé">▾</button>
+        </div>
         <div class="kgrid" id="nbKeys">
           <div class="kb ksh">
             <button type="button" data-i="DB">DB</button><button type="button" data-i="FC">FC</button><button type="button" data-i="FB">FB</button><button type="button" data-i="OB">OB</button>
             <button type="button" data-i="MW">MW</button><button type="button" data-i="M">M</button><button type="button" data-i="I">I</button><button type="button" data-i="Q">Q</button>
             <button type="button" data-i=".DBX">DBX</button><button type="button" data-i=".DBW">DBW</button><button type="button" data-i=".DBD">DBD</button><button type="button" data-i=" : " class="acc">:</button>
             <button type="button" data-i="16#">16#</button><button type="button" data-i=" -> hex">→hex</button><button type="button" data-i="ans">ans</button><button type="button" data-i="\ntotal\n" class="acc">Σ</button>
+          </div>
+          <div class="kb kkw">
+            <button type="button" data-w=" → " class="ar">→</button><button type="button" data-w=" ← " class="ar">←</button><button type="button" data-w=" ↑ " class="ar">↑</button><button type="button" data-w=" ↓ " class="ar">↓</button><button type="button" data-w=" ⇒ " class="ar">⇒</button>
+            <button type="button" data-w="TRIG">TRIG</button><button type="button" data-w="POS">POS</button><button type="button" data-w="NEG">NEG</button><button type="button" data-w="SET">SET</button><button type="button" data-w="RST">RST</button>
+            <button type="button" data-w="TO CHECK" class="w">TO CHECK</button><button type="button" data-w="TODO" class="w">TODO</button><button type="button" data-w="?" class="w">?</button><button type="button" data-w="OK" class="g">OK</button><button type="button" data-w="NOK" class="w">NOK</button>
+            <button type="button" data-w="ON">ON</button><button type="button" data-w="OFF">OFF</button><button type="button" data-w="AUTO">AUTO</button><button type="button" data-w="MANU">MANU</button><button type="button" data-w="HS" class="w">HS</button>
+            <button type="button" data-w="TON">TON</button><button type="button" data-w="TOF">TOF</button><button type="button" data-w="ALARME">ALARME</button><button type="button" data-w="DÉFAUT">DÉFAUT</button><button type="button" data-w="⚠" class="w">⚠</button>
           </div>
           <div class="kb knum">
             <button type="button" data-i="7">7</button><button type="button" data-i="8">8</button><button type="button" data-i="9">9</button><button type="button" data-i="/" class="op">÷</button>
@@ -1577,7 +1620,7 @@ html.full main.mods{flex:1;min-height:0}
             <button type="button" data-i="(">(</button><button type="button" data-i=")">)</button><button type="button" data-k="bs" aria-label="Effacer" class="fn">⌫</button>
             <button type="button" data-i=" = ">=</button><button type="button" data-i="%">%</button><button type="button" data-k="nl" aria-label="Nouvelle ligne" class="fn">↵</button>
             <button type="button" data-i="^">x<sup>y</sup></button><button type="button" data-i="sqrt(">√</button><button type="button" data-i=" ">␣</button>
-            <button type="button" data-k="left" aria-label="Curseur à gauche" class="fn">←</button><button type="button" data-k="right" aria-label="Curseur à droite" class="fn">→</button><button type="button" data-k="hide" aria-label="Masquer le clavier" class="fn">▾</button>
+            <button type="button" data-k="left" aria-label="Curseur à gauche" class="fn">←</button><button type="button" data-k="right" aria-label="Curseur à droite" class="fn">→</button><button type="button" data-k="mode" aria-label="Basculer vers le clavier de l'iPad" class="fn" id="nbAbc">abc</button>
           </div>
         </div>
       </div>
@@ -1598,6 +1641,9 @@ html.full main.mods{flex:1;min-height:0}
         <div><code>pi · 2^10 · 10 mod 3</code><span>Constantes et opérateurs</span></div>
         <div><code>DB10.DBW4 · FC12 · MW20 · I0.3</code><span>Repères S7 relevés dans le panneau Repères</span></div>
         <div><code># Titre · // commentaire</code><span>Ligne de titre surlignée, commentaire sans calcul</span></div>
+        <div><code>TO CHECK · TODO · ? · NOK · HS</code><span>Mots-clés surlignés en orange : la ligne apparaît dans « À vérifier » tant qu'elle n'est pas marquée OK</span></div>
+        <div><code>TRIG · POS · NEG · SET · RST · → ⇒</code><span>Onglet Mots-clés du pavé (insérés avec les espaces). Aussi en autocomplétion</span></div>
+        <div><code>Pavé : Raccourcis / Clavier iPad</code><span>« abc » ou « ⌨ Clavier iPad » ouvre le clavier de l'iPad ; « 123 Raccourcis » revient au pavé seul</span></div>
       </div>
     </details>
   </div>
@@ -3083,6 +3129,27 @@ function tokensOf(line){
   var o=[], last=-1; spans.forEach(function(x){ if(x.s>=last){ o.push(x); last=x.e; } }); return o;
 }
 function normRef(t){ return t.replace(/\s+/g,'').toUpperCase().replace(/^%/,''); }
+/* mots-clés de suivi : c = à vérifier, o = fait, n = défaut, i = info. ci : insensible à la casse ; sinon MAJUSCULES seulement */
+var KWS=[
+  {c:'kwc',ci:1,w:['TO CHECK','TO DO','TODO','À VÉRIFIER','A VERIFIER','À FAIRE','A FAIRE','???','??','?']},
+  {c:'kwo',ci:1,w:['OK','FAIT','✓','✔']},
+  {c:'kwn',ci:1,w:['NOK','HS','✗','✘','⚠']},
+  {c:'kwn',ci:0,w:['DÉFAUT','DEFAUT','ALARME']},
+  {c:'kwi',ci:1,w:['TRIG','R_TRIG','F_TRIG']},
+  {c:'kwi',ci:0,w:['POS','NEG','SET','RST','RESET','ON','OFF','AUTO','MANU','TON','TOF','TP','CTU','CTD','IN','OUT','NOT','AND','OR','XOR','ET','OU','IHM','HMI']}
+];
+var BND='A-Za-z0-9_À-ɏ';
+KWS.forEach(function(g){ var alt=g.w.slice().sort(function(a,b){ return b.length-a.length; }).map(function(w){ return w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }).join('|');
+  g.re=new RegExp('(^|[^'+BND+'])('+alt+')(?=$|[^'+BND+'])',g.ci?'gi':'g'); });
+var ARROW=/[→←↑↓⇒⇐⇔↔]/g;
+function kwTokens(line){
+  var o=[];
+  KWS.forEach(function(g){ g.re.lastIndex=0; var m; while((m=g.re.exec(line))){ var s0=m.index+m[1].length; o.push({s:s0,e:s0+m[2].length,c:g.c,t:m[2]}); if(m[0].length===0) g.re.lastIndex++; } });
+  ARROW.lastIndex=0; var a; while((a=ARROW.exec(line))) o.push({s:a.index,e:a.index+1,c:'kwi',t:a[0]});
+  return o;
+}
+var CHK=/(^|[^A-Za-z0-9_À-ɏ])(TO ?CHECK|TO ?DO|TODO|[ÀA] V[ÉE]RIFIER|[ÀA] FAIRE|\?{1,3})(?=$|[^A-Za-z0-9_À-ɏ])/i, DONE=/(^|[^A-Za-z0-9_À-ɏ])(OK|FAIT|✓|✔)(?=$|[^A-Za-z0-9_À-ɏ])/i;
+function isOpen(line){ var m=CHK.exec(line); if(!m) return null; if(DONE.test(line.slice(m.index+m[0].length))) return null; return m[2].toUpperCase().replace(/^TO ?CHECK$/,'TO CHECK').replace(/^TO ?DO$/,'TODO'); }
 
 /* =========================================================
    ÉDITEUR
@@ -3093,6 +3160,7 @@ function ensureNote(){ if(!cur()){ var n={id:nid(),text:'',created:Date.now(),up
 function layHtml(text,an){
   var lines=String(text).split('\n');
   return lines.map(function(line,i){ var r=an.lines[i]||{}, toks=tokensOf(line), h='', p=0;
+    kwTokens(line).forEach(function(k){ if(!toks.some(function(t){ return k.s<t.e&&k.e>t.s; })) toks.push(k); }); toks.sort(function(a,b){ return a.s-b.s; });
     if(r.var){ var vi=line.toLowerCase().indexOf(r.var); if(vi>=0&&!toks.some(function(t){ return vi<t.e&&vi+r.var.length>t.s; })) { toks.push({s:vi,e:vi+r.var.length,c:'var'}); toks.sort(function(a,b){ return a.s-b.s; }); } }
     toks.forEach(function(t){ h+=esc(line.slice(p,t.s))+'<span class="tk '+t.c+'">'+esc(line.slice(t.s,t.e))+'</span>'; p=t.e; });
     h+=esc(line.slice(p));
@@ -3123,14 +3191,15 @@ function renderRefs(){
       (groups[g]=groups[g]||[]).push({k:key,c:t.c,d:desc,l:i}); count++;
     });
   });
+  lines.forEach(function(line,i){ var k=isOpen(line); if(!k) return; var d=line.replace(CHK,'$1').replace(/^[\s:=\-–>|,;]+|[\s:=\-–>|,;]+$/g,'').replace(/\s{2,}/g,' ').trim(); (groups['À vérifier']=groups['À vérifier']||[]).push({k:k,c:'chk',d:d,l:i}); count++; });
   Object.keys(A.vars).forEach(function(v){ (groups['Variables']=groups['Variables']||[]).push({k:v,c:'var',d:'= '+nf(A.vars[v]),l:lines.findIndex(function(x){ return new RegExp('^\\s*'+v+'\\s*=','i').test(x); })}); count++; });
   $('nbRefN').textContent=count;
-  var order=['Blocs de données','Blocs de code','Mémentos et E/S','Adresses IP','Variables'];
+  var order=['À vérifier','Blocs de données','Blocs de code','Mémentos et E/S','Adresses IP','Variables'];
   var h=order.filter(function(g){ return groups[g]; }).map(function(g){
-    var it=groups[g]; if(g!=='Variables') it.sort(function(a,b){ return a.k.localeCompare(b.k,'fr',{numeric:true}); });
+    var it=groups[g]; if(g!=='Variables'&&g!=='À vérifier') it.sort(function(a,b){ return a.k.localeCompare(b.k,'fr',{numeric:true}); });
     return '<div class="grp"><b>'+esc(g)+'</b>'+it.map(function(x){ return '<button class="it" type="button" data-l="'+x.l+'"><code class="'+x.c+'">'+esc(x.k)+'</code><span>'+esc(x.d||'—')+'</span></button>'; }).join('')+'</div>';
   }).join('');
-  $('nbRefs').innerHTML=h||'<p class="empty">Les DB, FC, FB, OB, mémentos, E/S, adresses IP et variables écrits dans la note apparaissent ici, avec le texte de leur ligne.</p>';
+  $('nbRefs').innerHTML=h||'<p class="empty">Les DB, FC, FB, OB, mémentos, E/S, adresses IP, variables et lignes marquées TO CHECK / TODO / ? apparaissent ici, avec le texte de leur ligne.</p>';
   $('nbRefCopy').disabled=!count;
 }
 function gotoLine(i){
@@ -3174,19 +3243,72 @@ function keyCmd(k){
   else if(k==='left') setSel(Math.max(0,r.a-1));
   else if(k==='right') setSel(Math.min(v.length,r.b+1));
   else if(k==='hide') setPad(false);
+  else if(k==='mode'){ setMode(MODE==='kb'?'pad':'kb',true); return; }
   acUpdate();
+}
+function insertWord(w){
+  var r=sel(), v=ta.value, b=v.slice(0,r.a), a=v.slice(r.b);
+  if(/^ .* $/.test(w)){ if(/ $|^$|\n$/.test(b)) w=w.slice(1); if(/^ /.test(a)) w=w.slice(0,-1); }
+  else { if(b&&!/[\s(]$/.test(b)) w=' '+w; if(!/^\s/.test(a)) w=w+' '; }
+  replaceRange(r.a,r.b,w);
 }
 var pd=$('nbKeys');
 pd.addEventListener('pointerdown',function(e){ if(e.target.closest('button')) e.preventDefault(); });
 pd.addEventListener('mousedown',function(e){ if(e.target.closest('button')) e.preventDefault(); });
-pd.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; if(b.hasAttribute('data-k')) keyCmd(b.getAttribute('data-k')); else insert(b.getAttribute('data-i')); });
+pd.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; if(b.hasAttribute('data-k')) keyCmd(b.getAttribute('data-k')); else if(b.hasAttribute('data-w')){ insertWord(b.getAttribute('data-w')); acUpdate(); } else insert(b.getAttribute('data-i')); });
+var bar=document.querySelector('.kbar');
+bar.addEventListener('pointerdown',function(e){ if(e.target.closest('button')) e.preventDefault(); });
+bar.addEventListener('mousedown',function(e){ if(e.target.closest('button')) e.preventDefault(); });
+var TABK='fsi-bloc-notes-onglet', SIZEK='fsi-bloc-notes-taille', MODEK='fsi-bloc-notes-mode';
+var TOUCH=(navigator.maxTouchPoints||0)>0||(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches);
+function lsGet(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:v; }catch(_){ return d; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(_){} }
+function pressed(box,v){ box.querySelectorAll('[data-v]').forEach(function(b){ b.setAttribute('aria-pressed',String(b.getAttribute('data-v')===v)); }); }
+var TAB=lsGet(TABK,'s7'), SIZE=lsGet(SIZEK,TOUCH?'l':'n'), MODE=TOUCH?lsGet(MODEK,'pad'):'kb';
+function applyPad(){
+  var pad=$('nbPad');
+  pad.classList.toggle('tab-kw',TAB==='kw'); pressed($('nbTab'),TAB);
+  pad.classList.remove('ks-l','ks-xl'); if(SIZE!=='n') pad.classList.add('ks-'+SIZE); pressed($('nbSize'),SIZE);
+  pad.classList.toggle('kbmode',TOUCH&&MODE==='kb');
+  $('nbMode').hidden=!TOUCH; $('nbMode').setAttribute('aria-pressed',String(MODE==='kb'));
+  $('nbMode').textContent=MODE==='kb'?'123 Raccourcis':'⌨ Clavier iPad';
+  var abc=$('nbAbc'); if(abc){ abc.textContent=TOUCH?'abc':'▾'; abc.setAttribute('data-k',TOUCH?'mode':'hide'); abc.setAttribute('aria-label',TOUCH?'Clavier de l\'iPad':'Masquer le clavier'); }
+  ta.setAttribute('inputmode',TOUCH&&MODE==='pad'&&!pad.hidden?'none':'text');
+  dock();
+}
+function setMode(m,refocus){
+  MODE=m; lsSet(MODEK,m);
+  var r=sel(), had=refocus||document.activeElement===ta;
+  if(had) ta.blur();
+  applyPad();
+  if(had){ ta.focus(); try{ ta.setSelectionRange(r.a,r.b); }catch(_){} }
+}
+$('nbTab').addEventListener('click',function(e){ var b=e.target.closest('[data-v]'); if(!b) return; TAB=b.getAttribute('data-v'); lsSet(TABK,TAB); applyPad(); });
+$('nbSize').addEventListener('click',function(e){ var b=e.target.closest('[data-v]'); if(!b) return; SIZE=b.getAttribute('data-v'); lsSet(SIZEK,SIZE); applyPad(); });
+$('nbMode').addEventListener('click',function(){ setMode(MODE==='kb'?'pad':'kb',true); });
+$('nbHide').addEventListener('click',function(){ setPad(false); });
+/* en mode clavier iPad : le pavé compact se colle au-dessus du clavier virtuel */
+var VV=window.visualViewport;
+function dock(){
+  var pad=$('nbPad'), ed=$('nbEd');
+  if(!VV||!TOUCH){ pad.classList.remove('dock'); return; }
+  var lay=document.documentElement.clientHeight, kb=lay-(VV.height+VV.offsetTop);
+  var on=MODE==='kb'&&!pad.hidden&&document.activeElement===ta&&(lay-VV.height)>120;
+  pad.classList.toggle('dock',on);
+  if(on){ pad.style.top=Math.max(0,VV.offsetTop+VV.height-pad.offsetHeight)+'px'; ed.style.paddingBottom=pad.offsetHeight+'px'; }
+  else { pad.style.top=''; ed.style.paddingBottom=''; }
+}
+if(VV){ VV.addEventListener('resize',dock); VV.addEventListener('scroll',dock); }
+ta.addEventListener('focus',function(){ setTimeout(dock,50); setTimeout(dock,400); });
+ta.addEventListener('blur',function(){ setTimeout(dock,150); });
 var PADK='fsi-bloc-notes-clavier';
-function setPad(on){ $('nbPad').hidden=!on; $('nbPadT').setAttribute('aria-pressed',String(on)); try{ localStorage.setItem(PADK,on?'1':'0'); }catch(_){} }
+function setPad(on){ $('nbPad').hidden=!on; $('nbPadT').setAttribute('aria-pressed',String(on)); try{ localStorage.setItem(PADK,on?'1':'0'); }catch(_){} if(typeof applyPad==='function'&&$('nbTab')) applyPad(); }
 $('nbPadT').addEventListener('click',function(){ setPad($('nbPad').hidden); });
-(function(){ var v=null; try{ v=localStorage.getItem(PADK); }catch(_){} setPad(v===null?window.innerWidth>=600:v==='1'); })();
+(function(){ var v=null; try{ v=localStorage.getItem(PADK); }catch(_){} setPad(v===null?(TOUCH||window.innerWidth>=600):v==='1'); })();
+applyPad();
 
 /* ---------- autocomplétion ---------- */
-var KW=[['total','somme des lignes au-dessus'],['ans','résultat précédent'],['-> hex','résultat en hexa'],['-> bin','résultat en binaire'],['sqrt(','racine carrée'],['round(','arrondi : round(x;2)'],['mod','reste de division']];
+var KW=[['TO CHECK','à vérifier'],['TODO','à faire'],['TRIG','front'],['POS','front positif'],['NEG','front négatif'],['NOK','pas bon'],['RESET','remise à zéro'],['ALARME',''],['DÉFAUT',''],['MANU','mode manuel'],['AUTO','mode auto'],['total','somme des lignes au-dessus'],['ans','résultat précédent'],['-> hex','résultat en hexa'],['-> bin','résultat en binaire'],['sqrt(','racine carrée'],['round(','arrondi : round(x;2)'],['mod','reste de division']];
 var STEP={DB:1,FC:1,FB:1,OB:1,UDT:1,MB:1,MW:2,MD:4,IB:1,IW:2,ID:4,QB:1,QW:2,QD:4};
 function allIndex(){
   var refs={}, words={};
@@ -3232,7 +3354,7 @@ function suggest(){
     Object.keys(I.refs).filter(function(k){ return k.indexOf(P)===0&&k!==P; }).sort(function(a,b){ return a.localeCompare(b,'fr',{numeric:true}); }).slice(0,6).forEach(function(k){ add(k,k,I.refs[k].d,'ref'); });
   }
   if(A&&A.vars) Object.keys(A.vars).forEach(function(v){ if(v.indexOf(pre.toLowerCase())===0&&v!==pre.toLowerCase()) add(v,v,'= '+nf(A.vars[v]),'var'); });
-  if(pre.length>=2) KW.forEach(function(k){ if(k[0].indexOf(pre.toLowerCase())===0) add(k[0],k[0],k[1],'kw'); });
+  if(pre.length>=2) KW.forEach(function(k){ if(norm(k[0]).indexOf(norm(pre))===0&&norm(k[0])!==norm(pre)) add(k[0],k[0],k[1],'kw'); });
   if(pre.length>=2&&/^[A-Za-zÀ-ɏ]/.test(pre)){
     var lp=pre.toLowerCase();
     Object.keys(I.words).filter(function(w){ return w.indexOf(lp)===0&&w.length>lp.length+1&&!(w===lp); }).sort(function(a,b){ return I.words[b].n-I.words[a].n; }).slice(0,4).forEach(function(w){
@@ -3292,7 +3414,7 @@ function norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[
 function renderList(){
   var q=norm($('nbQ').value).trim(), ws=q.split(/\s+/).filter(Boolean);
   var L=st.notes.slice().sort(function(a,b){ return b.updated-a.updated; }).filter(function(n){ var h=norm(n.text).replace(/\s+/g,' '), hc=h.replace(/\s/g,''); return ws.every(function(w){ return h.indexOf(w)>=0||hc.indexOf(w.replace(/\s/g,''))>=0; }); });
-  $('nbList').innerHTML=L.length?L.map(function(n){ return '<button type="button" data-id="'+n.id+'" aria-current="'+(n.id===st.cur)+'"><b>'+esc(titleOf(n))+'</b><small><span>'+esc(when(n.updated))+'</span><span>'+esc(prevOf(n))+'</span></small></button>'; }).join('')
+  $('nbList').innerHTML=L.length?L.map(function(n){ return '<button type="button" data-id="'+n.id+'" aria-current="'+(n.id===st.cur)+'"><b>'+esc(titleOf(n))+'</b><small><span>'+esc(when(n.updated))+'</span>'+(function(){ var k=String(n.text||'').split('\n').filter(isOpen).length; return k?'<span class="tc">⚠ '+k+'</span>':''; })()+'<span>'+esc(prevOf(n))+'</span></small></button>'; }).join('')
     :'<div class="none">'+(st.notes.length?'Aucune note ne contient « '+esc($('nbQ').value)+' ».':'Aucune note pour l’instant. Tapez directement dans la page : la note est créée et enregistrée toute seule.')+'</div>';
   $('nbTogL').textContent='Mes notes ('+st.notes.length+')';
 }
