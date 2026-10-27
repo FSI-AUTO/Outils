@@ -1,0 +1,32 @@
+{
+  "name": "Boîte à outils automaticien — FSI Automation",
+  "short_name": "Outils FSI",
+  "description": "GRAFCET, test logique, mise en service, PID, défauts variateurs, conversions, réseau.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./#accueil",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f6f2eb",
+  "theme_color": "#0d2c4f",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
