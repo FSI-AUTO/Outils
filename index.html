@@ -578,8 +578,10 @@ html.full main.mods{flex:1;min-height:0}
 
 /* ===== Bloc-notes ===== */
 #m-notes .nb{max-width:1500px;margin:0 auto;padding-block:18px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  display:grid;grid-template-columns:240px minmax(0,1fr) 280px;gap:16px;align-items:start}
-#m-notes .nbl{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);display:flex;flex-direction:column;gap:8px;max-height:calc(100vh - 90px);min-width:0}
+  display:grid;grid-template-columns:270px minmax(0,1fr);gap:16px;align-items:start}
+#m-notes .nleft{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 86px);min-width:0}
+#m-notes .nmain{min-width:0}
+#m-notes .nbl{display:flex;flex-direction:column;gap:8px;min-width:0;min-height:0;flex:0 1 auto;max-height:42%}
 #m-notes .nbl .top{display:flex;gap:6px}
 #m-notes .nbl .top .in{flex:1}
 #m-notes .nbl .lst{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:auto;min-height:0;padding:4px}
@@ -634,8 +636,18 @@ html.full main.mods{flex:1;min-height:0}
 #m-notes .kstrip button span{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #m-notes .kstrip button.on{border-color:var(--pri);box-shadow:inset 0 0 0 1px var(--pri)}
 #m-notes .kstrip .hint0{font-size:12.5px;color:var(--muted);padding-left:2px}
-#m-notes .kgrid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,4fr) minmax(0,3fr);gap:10px}
-#m-notes .kb{display:grid;gap:6px;min-width:0}
+#m-notes .kgrid{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,4fr) minmax(0,4fr) minmax(0,3fr);gap:10px}
+@media (max-width:1240px){
+  #m-notes .kgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  #m-notes .knum{order:0}
+  #m-notes .kext{order:1}
+  #m-notes .kkw{order:2}
+  #m-notes .ksh{order:3}
+}
+@media (max-width:600px){
+  #m-notes .kkw,#m-notes .ksh{grid-column:1/-1}
+}
+#m-notes .kb{display:grid;gap:6px;min-width:0;align-content:start}
 #m-notes .ksh,#m-notes .knum{grid-template-columns:repeat(4,minmax(0,1fr))}
 #m-notes .kext{grid-template-columns:repeat(3,minmax(0,1fr))}
 #m-notes .kpad{--kh:46px;--kf:1}
@@ -652,13 +664,16 @@ html.full main.mods{flex:1;min-height:0}
 #m-notes .kb button:active{background:var(--sky-soft);transform:translateY(1px)}
 #m-notes .ksh button{font-size:calc(15px*var(--kf));font-weight:500}
 #m-notes .knum button{font-size:calc(19px*var(--kf));font-weight:500}
-#m-notes .kkw{grid-template-columns:repeat(5,minmax(0,1fr))}
-#m-notes .kkw button{font-family:var(--f-ui);font-weight:700;font-size:calc(12.5px*var(--kf));padding:0 2px;white-space:normal;line-height:1.05;letter-spacing:.01em}
+#m-notes .kkw{grid-template-columns:repeat(6,minmax(0,1fr))}
+#m-notes .kkw button{font-family:var(--f-ui);font-weight:700;font-size:calc(12px*var(--kf));padding:0 2px;white-space:normal;line-height:1.05;letter-spacing:.01em}
+#m-notes .kkw button.lg{font-size:calc(10px*var(--kf));letter-spacing:-.02em;padding:0 1px}
 #m-notes .kkw button.ar{font-size:calc(22px*var(--kf));font-weight:500;font-family:var(--f-ui)}
 #m-notes .kkw button.w{background:var(--warn-soft);color:var(--warn)}
 #m-notes .kkw button.g{background:var(--ok-soft);color:var(--ok)}
-#m-notes .kpad.tab-kw .ksh,#m-notes .kpad:not(.tab-kw) .kkw{display:none}
-#m-notes .kpad.tab-kw .kgrid{grid-template-columns:minmax(0,5fr) minmax(0,4fr) minmax(0,3fr)}
+#m-notes .kkw{order:0}
+#m-notes .ksh{order:1}
+#m-notes .knum{order:2}
+#m-notes .kext{order:3}
 #m-notes .kpad.kbmode .knum,#m-notes .kpad.kbmode .kext{display:none}
 #m-notes .kpad.kbmode .kgrid{grid-template-columns:minmax(0,1fr)!important}
 #m-notes .kpad.kbmode .ksh,#m-notes .kpad.kbmode .kkw{grid-template-columns:repeat(auto-fill,minmax(calc(68px*var(--kf)),1fr))}
@@ -685,7 +700,7 @@ html.full main.mods{flex:1;min-height:0}
 #m-notes .ned .lay.meas{visibility:hidden;z-index:0}
 #m-notes .nft{display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 12px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 #m-notes .nft .sp{flex:1}
-#m-notes .nrp{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);max-height:calc(100vh - 90px);overflow:auto}
+#m-notes .nrp{overflow:auto;flex:1 1 auto;min-height:140px}
 #m-notes .nrp h3{margin:0;padding:12px 14px 8px;display:flex;align-items:center;gap:8px}
 #m-notes .nrp .grp{padding:0 8px 8px}
 #m-notes .nrp .grp>b{display:block;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 6px 4px}
@@ -710,21 +725,20 @@ html.full main.mods{flex:1;min-height:0}
   :root:not([data-theme="light"]) #m-notes .ned .tk.var,:root:not([data-theme="light"]) #m-notes .nrp .it code.var{background:rgba(228,237,247,.12)}
 }
 :root[data-theme="dark"] #m-notes .ned .tk.var,:root[data-theme="dark"] #m-notes .nrp .it code.var{background:rgba(228,237,247,.12)}
-@media (max-width:1180px){
-  #m-notes .nb{grid-template-columns:220px minmax(0,1fr)}
-  #m-notes .nrp{grid-column:2;position:static;max-height:none}
+@media (max-width:1100px){
+  #m-notes .nb{grid-template-columns:230px minmax(0,1fr)}
 }
 @media (max-width:820px){
   #m-notes .nb{grid-template-columns:minmax(0,1fr)}
-  #m-notes .nrp{grid-column:auto}
-  #m-notes .nbl{position:static;max-height:none}
+  #m-notes .nleft{display:contents}
+  #m-notes .nbl{order:1;max-height:none}
+  #m-notes .nmain{order:2}
+  #m-notes .nrp{order:3;min-height:0}
   #m-notes .nbl .tog{display:flex}
   #m-notes .nbl.closed .lst,#m-notes .nbl.closed .top{display:none}
   #m-notes .nbl .lst{max-height:50vh}
   #m-notes .ned{--resw:112px}
   #m-notes .kgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  #m-notes .ksh,#m-notes .kkw{grid-column:1/-1;order:3}
-  #m-notes .kpad.tab-kw .kgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   #m-notes .nft .hk{display:none}
   #m-notes .ned textarea,#m-notes .ned .lay{padding-left:12px}
 }
@@ -1253,7 +1267,12 @@ html.full main.mods{flex:1;min-height:0}
 #m-calc .dchart .dtk{fill:var(--muted);font-size:11px}
 #m-calc .dchart .dlb{fill:var(--sky-ink);font-size:11.5px;font-weight:500}
 #m-calc .dchart .dax2{fill:var(--muted);font-size:10.5px;font-family:var(--f-ui)}
-#m-calc .ichart svg{display:block;width:100%;height:auto;max-width:540px;font-family:var(--f-mono)}
+#m-calc .ichart svg{display:block;width:100%;height:auto;max-width:620px;font-family:var(--f-mono);touch-action:none;cursor:ew-resize;-webkit-user-select:none;user-select:none}
+#m-calc .ichart.drag svg{cursor:grabbing}
+#m-calc .ichart .iq{cursor:grab}
+#m-calc .ichart .ihnd{fill:var(--sky);opacity:.18}
+#m-calc .ichart .ival{fill:var(--sky-ink);font-size:12px;font-weight:700;font-family:var(--f-ui)}
+#m-calc .ichint{font-size:12.5px;color:var(--muted);margin:-4px 0 10px}
 #m-calc .ichart .ifr{fill:var(--raise);stroke:var(--line)}
 #m-calc .ichart .iln{stroke:var(--muted);stroke-width:1.4;stroke-dasharray:5 4;fill:none}
 #m-calc .ichart .ilnin{stroke:var(--pri);stroke-width:2.2;fill:none}
@@ -1571,12 +1590,18 @@ html.full main.mods{flex:1;min-height:0}
 </section>
 <section class="mod kit" id="m-notes" hidden aria-label="Bloc-notes">
 <div class="nb">
+  <div class="nleft">
   <aside class="nbl closed" id="nbSide">
     <button class="btn tog" id="nbTog" type="button" aria-expanded="false"><span id="nbTogL">Mes notes</span></button>
     <div class="top"><input class="in" id="nbQ" type="search" placeholder="Chercher : DB10, FC…" autocomplete="off" aria-label="Chercher dans les notes"><button class="btn" id="nbNew" type="button" title="Nouvelle note (Alt+N)">+ Note</button></div>
     <div class="lst" id="nbList"></div>
   </aside>
-  <div style="min-width:0">
+  <aside class="ncard nrp" id="nbRef">
+    <h3>Repères <span class="chip" id="nbRefN">0</span><span class="sp"></span><button class="btn sm" id="nbRefCopy" type="button" title="Copier pour Excel">Copier</button></h3>
+    <div id="nbRefs"></div>
+  </aside>
+  </div>
+  <div class="nmain">
     <div class="ncard">
       <div class="nhd"><h2 id="nbTitle">Nouvelle note</h2><span class="sync" id="nbSync"></span>
         <button class="btn sm" id="nbCopy" type="button">Copier</button><button class="btn sm" id="nbTxt" type="button">.txt</button><button class="btn sm" id="nbDel" type="button">Supprimer</button></div>
@@ -1590,7 +1615,6 @@ html.full main.mods{flex:1;min-height:0}
       <div class="kpad" id="nbPad">
         <div class="kstrip" id="nbStrip" aria-label="Suggestions"></div>
         <div class="kbar">
-          <div class="seg" role="group" aria-label="Touches" id="nbTab"><button type="button" data-v="s7">S7</button><button type="button" data-v="kw">Mots-clés</button></div>
           <div class="seg" role="group" aria-label="Taille des touches" id="nbSize"><button type="button" data-v="n" title="Touches normales">A</button><button type="button" data-v="l" title="Grandes touches">A+</button><button type="button" data-v="xl" title="Très grandes touches">A++</button></div>
           <span class="sp"></span>
           <button type="button" class="btn" id="nbMode" aria-pressed="false" hidden>⌨ Clavier iPad</button>
@@ -1604,11 +1628,11 @@ html.full main.mods{flex:1;min-height:0}
             <button type="button" data-i="16#">16#</button><button type="button" data-i=" -> hex">→hex</button><button type="button" data-i="ans">ans</button><button type="button" data-i="\ntotal\n" class="acc">Σ</button>
           </div>
           <div class="kb kkw">
-            <button type="button" data-w=" → " class="ar">→</button><button type="button" data-w=" ← " class="ar">←</button><button type="button" data-w=" ↑ " class="ar">↑</button><button type="button" data-w=" ↓ " class="ar">↓</button><button type="button" data-w=" ⇒ " class="ar">⇒</button>
-            <button type="button" data-w="TRIG">TRIG</button><button type="button" data-w="POS">POS</button><button type="button" data-w="NEG">NEG</button><button type="button" data-w="SET">SET</button><button type="button" data-w="RST">RST</button>
-            <button type="button" data-w="TO CHECK" class="w">TO CHECK</button><button type="button" data-w="TODO" class="w">TODO</button><button type="button" data-w="?" class="w">?</button><button type="button" data-w="OK" class="g">OK</button><button type="button" data-w="NOK" class="w">NOK</button>
-            <button type="button" data-w="ON">ON</button><button type="button" data-w="OFF">OFF</button><button type="button" data-w="AUTO">AUTO</button><button type="button" data-w="MANU">MANU</button><button type="button" data-w="HS" class="w">HS</button>
-            <button type="button" data-w="TON">TON</button><button type="button" data-w="TOF">TOF</button><button type="button" data-w="ALARME">ALARME</button><button type="button" data-w="DÉFAUT">DÉFAUT</button><button type="button" data-w="⚠" class="w">⚠</button>
+            <button type="button" data-w=" → " class="ar">→</button><button type="button" data-w=" ← " class="ar">←</button><button type="button" data-w=" ↑ " class="ar">↑</button><button type="button" data-w=" ↓ " class="ar">↓</button><button type="button" data-w=" ⇒ " class="ar">⇒</button><button type="button" data-w=" ↔ " class="ar">↔</button>
+            <button type="button" data-w="TRIG">TRIG</button><button type="button" data-w="POS">POS</button><button type="button" data-w="NEG">NEG</button><button type="button" data-w="SET">SET</button><button type="button" data-w="RST">RST</button><button type="button" data-w="?" class="w">?</button>
+            <button type="button" data-w="TO CHECK" class="w lg">TO CHECK</button><button type="button" data-w="TODO" class="w">TODO</button><button type="button" data-w="OK" class="g">OK</button><button type="button" data-w="NOK" class="w">NOK</button><button type="button" data-w="HS" class="w">HS</button><button type="button" data-w="⚠" class="w">⚠</button>
+            <button type="button" data-w="ON">ON</button><button type="button" data-w="OFF">OFF</button><button type="button" data-w="AUTO">AUTO</button><button type="button" data-w="MANU">MANU</button><button type="button" data-w="TON">TON</button><button type="button" data-w="TOF">TOF</button>
+            <button type="button" data-w="ALARME" class="lg">ALARME</button><button type="button" data-w="DÉFAUT" class="lg">DÉFAUT</button><button type="button" data-w="FAIT" class="g">FAIT</button><button type="button" data-w="IHM">IHM</button><button type="button" data-w="ET">ET</button><button type="button" data-w="OU">OU</button>
           </div>
           <div class="kb knum">
             <button type="button" data-i="7">7</button><button type="button" data-i="8">8</button><button type="button" data-i="9">9</button><button type="button" data-i="/" class="op">÷</button>
@@ -1642,15 +1666,11 @@ html.full main.mods{flex:1;min-height:0}
         <div><code>DB10.DBW4 · FC12 · MW20 · I0.3</code><span>Repères S7 relevés dans le panneau Repères</span></div>
         <div><code># Titre · // commentaire</code><span>Ligne de titre surlignée, commentaire sans calcul</span></div>
         <div><code>TO CHECK · TODO · ? · NOK · HS</code><span>Mots-clés surlignés en orange : la ligne apparaît dans « À vérifier » tant qu'elle n'est pas marquée OK</span></div>
-        <div><code>TRIG · POS · NEG · SET · RST · → ⇒</code><span>Onglet Mots-clés du pavé (insérés avec les espaces). Aussi en autocomplétion</span></div>
+        <div><code>TRIG · POS · NEG · SET · RST · → ⇒</code><span>Touches de mots-clés du pavé (insérés avec les espaces). Aussi en autocomplétion</span></div>
         <div><code>Pavé : Raccourcis / Clavier iPad</code><span>« abc » ou « ⌨ Clavier iPad » ouvre le clavier de l'iPad ; « 123 Raccourcis » revient au pavé seul</span></div>
       </div>
     </details>
   </div>
-  <aside class="ncard nrp" id="nbRef">
-    <h3>Repères <span class="chip" id="nbRefN">0</span><span class="sp"></span><button class="btn sm" id="nbRefCopy" type="button" title="Copier pour Excel">Copier</button></h3>
-    <div id="nbRefs"></div>
-  </aside>
 </div>
 <div class="toast" id="toast" hidden></div>
 </section>
@@ -3264,10 +3284,9 @@ var TOUCH=(navigator.maxTouchPoints||0)>0||(window.matchMedia&&window.matchMedia
 function lsGet(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:v; }catch(_){ return d; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(_){} }
 function pressed(box,v){ box.querySelectorAll('[data-v]').forEach(function(b){ b.setAttribute('aria-pressed',String(b.getAttribute('data-v')===v)); }); }
-var TAB=lsGet(TABK,'s7'), SIZE=lsGet(SIZEK,TOUCH?'l':'n'), MODE=TOUCH?lsGet(MODEK,'pad'):'kb';
+var SIZE=lsGet(SIZEK,TOUCH?'l':'n'), MODE=TOUCH?lsGet(MODEK,'pad'):'kb';
 function applyPad(){
   var pad=$('nbPad');
-  pad.classList.toggle('tab-kw',TAB==='kw'); pressed($('nbTab'),TAB);
   pad.classList.remove('ks-l','ks-xl'); if(SIZE!=='n') pad.classList.add('ks-'+SIZE); pressed($('nbSize'),SIZE);
   pad.classList.toggle('kbmode',TOUCH&&MODE==='kb');
   $('nbMode').hidden=!TOUCH; $('nbMode').setAttribute('aria-pressed',String(MODE==='kb'));
@@ -3283,7 +3302,6 @@ function setMode(m,refocus){
   applyPad();
   if(had){ ta.focus(); try{ ta.setSelectionRange(r.a,r.b); }catch(_){} }
 }
-$('nbTab').addEventListener('click',function(e){ var b=e.target.closest('[data-v]'); if(!b) return; TAB=b.getAttribute('data-v'); lsSet(TABK,TAB); applyPad(); });
 $('nbSize').addEventListener('click',function(e){ var b=e.target.closest('[data-v]'); if(!b) return; SIZE=b.getAttribute('data-v'); lsSet(SIZEK,SIZE); applyPad(); });
 $('nbMode').addEventListener('click',function(){ setMode(MODE==='kb'?'pad':'kb',true); });
 $('nbHide').addEventListener('click',function(){ setPad(false); });
@@ -3302,7 +3320,7 @@ if(VV){ VV.addEventListener('resize',dock); VV.addEventListener('scroll',dock); 
 ta.addEventListener('focus',function(){ setTimeout(dock,50); setTimeout(dock,400); });
 ta.addEventListener('blur',function(){ setTimeout(dock,150); });
 var PADK='fsi-bloc-notes-clavier';
-function setPad(on){ $('nbPad').hidden=!on; $('nbPadT').setAttribute('aria-pressed',String(on)); try{ localStorage.setItem(PADK,on?'1':'0'); }catch(_){} if(typeof applyPad==='function'&&$('nbTab')) applyPad(); }
+function setPad(on){ $('nbPad').hidden=!on; $('nbPadT').setAttribute('aria-pressed',String(on)); try{ localStorage.setItem(PADK,on?'1':'0'); }catch(_){} if(typeof applyPad==='function'&&$('nbSize')) applyPad(); }
 $('nbPadT').addEventListener('click',function(){ setPad($('nbPad').hidden); });
 (function(){ var v=null; try{ v=localStorage.getItem(PADK); }catch(_){} setPad(v===null?(TOUCH||window.innerWidth>=600):v==='1'); })();
 applyPad();
@@ -6959,11 +6977,17 @@ function icalc(){
   o.ok=true; return o;
 }
 function iSync(){ $('iX1').value=I.x1; $('iY1').value=I.y1; $('iX2').value=I.x2; $('iY2').value=I.y2; $('iUX').value=I.uX; $('iUY').value=I.uY; $('iV').value=I.v; $('iTag').value=I.tag; }
+var IR=null, IDRAG=null;
 function iChart(o){
-  var W=420,H=230,L=46,R=14,T=14,B=34;
-  var xs=[o.x1,o.x2], ys=[o.y1,o.y2]; if(o.ok){ xs.push(o.x); ys.push(o.y); }
-  var xa=Math.min.apply(null,xs), xb=Math.max.apply(null,xs), ya=Math.min.apply(null,ys), yb=Math.max.apply(null,ys);
-  var px=(xb-xa)*0.12||1, py=(yb-ya)*0.12||Math.abs(ya)*0.1||1; xa-=px; xb+=px; ya-=py; yb+=py;
+  var W=420,H=230,L=46,R=14,T=14,B=34, xa,xb,ya,yb;
+  if(IDRAG){ xa=IDRAG.xa; xb=IDRAG.xb; ya=IDRAG.ya; yb=IDRAG.yb; }
+  else {
+    var xs=[o.x1,o.x2], ys=[o.y1,o.y2]; if(o.ok){ xs.push(o.x); ys.push(o.y); }
+    xa=Math.min.apply(null,xs); xb=Math.max.apply(null,xs); ya=Math.min.apply(null,ys); yb=Math.max.apply(null,ys);
+    /* marge plus large pour pouvoir glisser un peu au-delà de P1 et P2 */
+    var px=(xb-xa)*0.2||1, py=(yb-ya)*0.2||Math.abs(ya)*0.1||1; xa-=px; xb+=px; ya-=py; yb+=py;
+  }
+  IR={W:W,H:H,L:L,R:R,T:T,B:B,xa:xa,xb:xb,ya:ya,yb:yb};
   function X(v){ return L+(v-xa)/(xb-xa)*(W-L-R); } function Y(v){ return H-B-(v-ya)/(yb-ya)*(H-T-B); }
   function r(v){ return Math.round(v*10)/10; }
   var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Droite passant par P1 et P2">';
@@ -6984,7 +7008,8 @@ function iChart(o){
     if(farX) s+=tickX(o.x,'q'); if(farY) s+=tickY(o.y,'q');
   }
   pts.forEach(function(p){ var cx=r(X(p[0])), cy=r(Y(p[1])); s+='<circle class="ipt" cx="'+cx+'" cy="'+cy+'" r="4.5"/><text class="ipl" x="'+(cx+8)+'" y="'+(cy-7)+'">'+p[2]+'</text>'; });
-  if(o.ok){ s+='<circle class="iq" cx="'+r(X(o.x))+'" cy="'+r(Y(o.y))+'" r="6"/>'; }
+  if(o.ok){ var qx=r(X(o.x)), qy=r(Y(o.y)); s+='<circle class="ihnd" cx="'+qx+'" cy="'+qy+'" r="16"/><circle class="iq" cx="'+qx+'" cy="'+qy+'" r="7"/>';
+    if(IDRAG){ var lab=(I.mode==='x'?fmt(o.y):fmt(o.x)), tx=Math.min(W-R-4,Math.max(L+4,qx)); s+='<text class="ival" x="'+tx+'" y="'+Math.max(T+12,qy-22)+'" text-anchor="'+(qx>W-90?'end':qx<L+60?'start':'middle')+'">'+esc(lab)+'</text>'; } }
   var uX=(I.uX||'').trim(), uY=(I.uY||'').trim();
   s+='<text class="iax" x="'+(W-R)+'" y="'+(H-4)+'" text-anchor="end">Consigne'+(uX?' ('+esc(uX)+')':'')+'</text>';
   s+='<text class="iax" x="4" y="'+(T-3)+'">Mesure'+(uY?' ('+esc(uY)+')':'')+'</text>';
@@ -7010,7 +7035,7 @@ function iRender(){
   }
   /* droite, graphique et SCL */
   if(o.line){
-    $('iChart').innerHTML=iChart(o);
+    $('iChart').innerHTML=iChart(o)+'<p class="ichint">Glissez sur le graphique pour faire varier la '+(I.mode==='x'?'consigne':'mesure')+'.</p>';
     var sl=uY&&uX?' '+uY+' / '+uX:(uY?' '+uY:'');
     var kv='<dt>Pente (gain)</dt><dd>'+esc(fmt(o.a))+esc(sl)+'</dd><dt>Décalage (mesure à consigne 0)</dt><dd>'+esc(wu(o.b,uY))+'</dd>';
     if(o.a!==0) kv+='<dt>Consigne pour mesure 0</dt><dd>'+esc(wu(-o.b/o.a,uX))+'</dd>';
@@ -7023,6 +7048,26 @@ function iRender(){
 [['iX1','x1'],['iY1','y1'],['iX2','x2'],['iY2','y2'],['iUX','uX'],['iUY','uY'],['iV','v'],['iTag','tag']].forEach(function(p){
   $(p[0]).addEventListener('input',function(){ I[p[1]]=this.value; iRender(); persist(); });
 });
+/* glisser sur le graphique : la position horizontale donne la consigne, le point suit la droite */
+function iStep(span){ var s0=Math.pow(10,Math.floor(Math.log10(Math.abs(span)/400||1))); return s0; }
+function iFromPointer(e){
+  var o=iCur, svg=$('iChart').querySelector('svg'); if(!o||!o.line||!svg||!IR) return;
+  var rc=svg.getBoundingClientRect(), sx=(e.clientX-rc.left)*(IR.W/rc.width);
+  var fx=(sx-IR.L)/(IR.W-IR.L-IR.R); fx=Math.max(0,Math.min(1,fx));
+  var x=IR.xa+fx*(IR.xb-IR.xa), v;
+  if(I.mode==='x'){ var st0=iStep(IR.xb-IR.xa); v=Math.round(x/st0)*st0; }
+  else { var y=o.a*x+o.b, st1=iStep((o.a*IR.xb+o.b)-(o.a*IR.xa+o.b)); v=Math.round(y/st1)*st1; }
+  I.v=fmt(+v.toPrecision(12),null,false); $('iV').value=I.v; iRender();
+}
+$('iChart').addEventListener('pointerdown',function(e){
+  var o=iCur; if(!o||!o.line||!e.target.closest('svg')) return;
+  e.preventDefault(); IDRAG={xa:IR.xa,xb:IR.xb,ya:IR.ya,yb:IR.yb,id:e.pointerId}; this.classList.add('drag');
+  try{ this.setPointerCapture(e.pointerId); }catch(_){}
+  iFromPointer(e);
+});
+$('iChart').addEventListener('pointermove',function(e){ if(IDRAG&&e.pointerId===IDRAG.id) iFromPointer(e); });
+function iEnd(e){ if(!IDRAG) return; IDRAG=null; $('iChart').classList.remove('drag'); iRender(); persist(); }
+$('iChart').addEventListener('pointerup',iEnd); $('iChart').addEventListener('pointercancel',iEnd);
 function iSetMode(m){ if(I.mode===m) return; var o=iCur; I.mode=m; if(o&&o.ok){ I.v=fmt(o.out,null,false); $('iV').value=I.v; } iRender(); persist(); $('iV').focus(); $('iV').select(); }
 $('iMX').addEventListener('click',function(){ iSetMode('x'); });
 $('iMY').addEventListener('click',function(){ iSetMode('y'); });
