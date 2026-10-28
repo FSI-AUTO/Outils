@@ -581,6 +581,23 @@ html.full main.mods{flex:1;min-height:0}
   display:grid;grid-template-columns:270px minmax(0,1fr);gap:16px;align-items:start}
 #m-notes .nleft{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 86px);min-width:0}
 #m-notes .nmain{min-width:0}
+#m-notes .nb.full{max-width:none;grid-template-columns:minmax(0,1fr);padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));padding-top:10px}
+#m-notes .nb.full .nleft{display:contents}
+#m-notes .nb.full .nbl{display:none}
+#m-notes .nb.full .nmain{order:2}
+#m-notes .nb.full .nrp{order:3;min-height:0}
+#m-notes .nb.full .kpad{padding-left:6px;padding-right:6px}
+@media (min-width:1241px){
+  #m-notes .nb.full .kkw button.lg{font-size:calc(11.5px*var(--kf))}
+  #m-notes .nb.full .kkw button{font-size:calc(13px*var(--kf))}
+}
+#m-notes .nhd .btn[aria-pressed="true"]{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+#m-notes .nnsel{display:none;max-width:220px;font:inherit;font-size:13.5px;border:1px solid var(--line);background:var(--raise);color:inherit;border-radius:6px;padding:5px 8px}
+#m-notes .nb.full .nnsel{display:block}
+#m-notes .kb button.hl{border-color:var(--sky);background:var(--sky-soft);box-shadow:inset 0 0 0 2px var(--sky);color:var(--sky-ink);font-weight:700}
+#m-notes .ned .tk.lp{outline:2.5px solid var(--sky);outline-offset:1px;background:rgba(63,163,242,.35)}
+#m-notes .nrp .it.on{background:var(--sky-soft);box-shadow:inset 0 0 0 2px var(--sky)}
+#m-notes .nrp .it{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 #m-notes .nbl{display:flex;flex-direction:column;gap:8px;min-width:0;min-height:0;flex:0 1 auto;max-height:42%}
 #m-notes .nbl .top{display:flex;gap:6px}
 #m-notes .nbl .top .in{flex:1}
@@ -1604,6 +1621,8 @@ html.full main.mods{flex:1;min-height:0}
   <div class="nmain">
     <div class="ncard">
       <div class="nhd"><h2 id="nbTitle">Nouvelle note</h2><span class="sync" id="nbSync"></span>
+        <select class="nnsel" id="nbSel" aria-label="Changer de note"></select>
+        <button class="btn sm" id="nbFull" type="button" aria-pressed="false" title="Note en plein écran">⤢ Plein écran</button>
         <button class="btn sm" id="nbCopy" type="button">Copier</button><button class="btn sm" id="nbTxt" type="button">.txt</button><button class="btn sm" id="nbDel" type="button">Supprimer</button></div>
       <div class="ned" id="nbEd">
         <div class="lay back" id="nbBack" aria-hidden="true"></div>
@@ -1667,6 +1686,8 @@ html.full main.mods{flex:1;min-height:0}
         <div><code># Titre · // commentaire</code><span>Ligne de titre surlignée, commentaire sans calcul</span></div>
         <div><code>TO CHECK · TODO · ? · NOK · HS</code><span>Mots-clés surlignés en orange : la ligne apparaît dans « À vérifier » tant qu'elle n'est pas marquée OK</span></div>
         <div><code>TRIG · POS · NEG · SET · RST · → ⇒</code><span>Touches de mots-clés du pavé (insérés avec les espaces). Aussi en autocomplétion</span></div>
+        <div><code>Appui long sur DB10, MW20, I0.3…</code><span>Copie l'adresse dans le presse-papier (dans la note ou dans les Repères)</span></div>
+        <div><code>DB + Tab</code><span>Propose d'abord le dernier numéro utilisé, puis le suivant libre</span></div>
         <div><code>Pavé : Raccourcis / Clavier iPad</code><span>« abc » ou « ⌨ Clavier iPad » ouvre le clavier de l'iPad ; « 123 Raccourcis » revient au pavé seul</span></div>
       </div>
     </details>
@@ -3228,7 +3249,27 @@ function gotoLine(i){
   ta.focus(); ta.setSelectionRange(s,s+lines[i].length);
   var row=$('nbBack').children[i]; if(row&&row.scrollIntoView) row.scrollIntoView({block:'center',behavior:'smooth'});
 }
-$('nbRefs').addEventListener('click',function(e){ var b=e.target.closest('[data-l]'); if(b) gotoLine(+b.getAttribute('data-l')); });
+var LPT=450, refLP=null, refSkip=false;
+$('nbRefs').addEventListener('pointerdown',function(e){ var b=e.target.closest('.it'); if(!b) return; refLP={b:b,x:e.clientX,y:e.clientY,t:Date.now()}; refLP.tm=setTimeout(function(){ if(refLP) refLP.b.classList.add('on'); },LPT); });
+$('nbRefs').addEventListener('pointermove',function(e){ if(refLP&&Math.hypot(e.clientX-refLP.x,e.clientY-refLP.y)>12){ clearTimeout(refLP.tm); refLP=null; } });
+$('nbRefs').addEventListener('pointerup',function(e){ if(!refLP) return; clearTimeout(refLP.tm); var b=refLP.b, long=Date.now()-refLP.t>=LPT; refLP=null; b.classList.remove('on');
+  if(long){ refSkip=true; var k=b.querySelector('code').textContent; if(b.querySelector('code').classList.contains('chk')) k=b.querySelector('span').textContent; copy(k,'Copié : '+k); } });
+$('nbRefs').addEventListener('pointercancel',function(){ if(refLP){ clearTimeout(refLP.tm); refLP=null; } });
+$('nbRefs').addEventListener('contextmenu',function(e){ if(e.target.closest('.it')) e.preventDefault(); });
+$('nbRefs').addEventListener('click',function(e){ if(refSkip){ refSkip=false; return; } var b=e.target.closest('[data-l]'); if(b) gotoLine(+b.getAttribute('data-l')); });
+/* appui long sur une adresse dans la note */
+var LP=null;
+function tokAt(x,y){ var sp=$('nbBack').querySelectorAll('.tk.db,.tk.blk,.tk.mem,.tk.ip'); for(var i=0;i<sp.length;i++){ var rs=sp[i].getClientRects(); for(var j=0;j<rs.length;j++){ var r=rs[j]; if(x>=r.left-4&&x<=r.right+4&&y>=r.top-3&&y<=r.bottom+3) return sp[i]; } } return null; }
+function lpStart(x,y){ var t=tokAt(x,y); LP={x:x,y:y,t:Date.now(),sp:t}; if(t) LP.tm=setTimeout(function(){ if(LP&&LP.sp) LP.sp.classList.add('lp'); },LPT); }
+function lpCancel(){ if(!LP) return; clearTimeout(LP.tm); if(LP.sp) LP.sp.classList.remove('lp'); LP=null; }
+function lpEnd(x,y){ if(!LP) return; var sp=LP.sp, ok=sp&&Date.now()-LP.t>=LPT&&Math.hypot(x-LP.x,y-LP.y)<14; lpCancel(); if(!ok) return;
+  var k=sp.classList.contains('ip')?sp.textContent.trim():normRef(sp.textContent); copy(k,'Copié : '+k); }
+ta.addEventListener('touchstart',function(e){ if(e.touches.length!==1){ lpCancel(); return; } var t=e.touches[0]; lpStart(t.clientX,t.clientY); },{passive:true});
+ta.addEventListener('touchmove',function(e){ if(!LP) return; var t=e.touches[0]; if(Math.hypot(t.clientX-LP.x,t.clientY-LP.y)>14) lpCancel(); },{passive:true});
+ta.addEventListener('touchend',function(e){ var t=e.changedTouches[0]; if(t) lpEnd(t.clientX,t.clientY); });
+ta.addEventListener('touchcancel',lpCancel);
+ta.addEventListener('mousedown',function(e){ if(e.button===0&&!(LP&&Date.now()-LP.t<800)) lpStart(e.clientX,e.clientY); });
+ta.addEventListener('mouseup',function(e){ lpEnd(e.clientX,e.clientY); });
 $('nbRefCopy').addEventListener('click',function(){
   var rows=[]; $('nbRefs').querySelectorAll('.it').forEach(function(b){ rows.push(b.querySelector('code').textContent+'\t'+b.querySelector('span').textContent.replace(/^—$/,'')); });
   copy(rows.join('\n'),'Repères copiés : collez-les dans Excel.');
@@ -3306,6 +3347,14 @@ $('nbSize').addEventListener('click',function(e){ var b=e.target.closest('[data-
 $('nbMode').addEventListener('click',function(){ setMode(MODE==='kb'?'pad':'kb',true); });
 $('nbHide').addEventListener('click',function(){ setPad(false); });
 /* en mode clavier iPad : le pavé compact se colle au-dessus du clavier virtuel */
+var FULLK='fsi-bloc-notes-plein-ecran';
+var FULL=lsGet(FULLK,TOUCH?'1':'0')==='1';
+function applyFull(){ var nb=document.querySelector('.nb'); nb.classList.toggle('full',FULL); $('nbFull').setAttribute('aria-pressed',String(FULL)); $('nbFull').textContent=FULL?'⤡ Panneaux':'⤢ Plein écran'; $('nbFull').title=FULL?'Afficher la liste des notes et les repères à gauche':'Note en plein écran'; renderSel(); }
+function renderSel(){ var sl=$('nbSel'); if(!FULL){ sl.innerHTML=''; return; }
+  var L=st.notes.slice().sort(function(a,b){ return b.updated-a.updated; });
+  sl.innerHTML=L.map(function(n){ return '<option value="'+n.id+'"'+(n.id===st.cur?' selected':'')+'>'+esc(titleOf(n))+'</option>'; }).join('')+'<option value="__new">+ Nouvelle note</option>'; }
+$('nbFull').addEventListener('click',function(){ FULL=!FULL; lsSet(FULLK,FULL?'1':'0'); applyFull(); setTimeout(dock,50); });
+$('nbSel').addEventListener('change',function(){ var v=this.value; if(v==='__new') newNote(); else open(v); renderSel(); });
 var VV=window.visualViewport;
 function dock(){
   var pad=$('nbPad'), ed=$('nbEd');
@@ -3324,6 +3373,7 @@ function setPad(on){ $('nbPad').hidden=!on; $('nbPadT').setAttribute('aria-press
 $('nbPadT').addEventListener('click',function(){ setPad($('nbPad').hidden); });
 (function(){ var v=null; try{ v=localStorage.getItem(PADK); }catch(_){} setPad(v===null?(TOUCH||window.innerWidth>=600):v==='1'); })();
 applyPad();
+applyFull();
 
 /* ---------- autocomplétion ---------- */
 var KW=[['TO CHECK','à vérifier'],['TODO','à faire'],['TRIG','front'],['POS','front positif'],['NEG','front négatif'],['NOK','pas bon'],['RESET','remise à zéro'],['ALARME',''],['DÉFAUT',''],['MANU','mode manuel'],['AUTO','mode auto'],['total','somme des lignes au-dessus'],['ans','résultat précédent'],['-> hex','résultat en hexa'],['-> bin','résultat en binaire'],['sqrt(','racine carrée'],['round(','arrondi : round(x;2)'],['mod','reste de division']];
@@ -3345,6 +3395,22 @@ function nextRef(type){
   if(/^[MIQ]$/.test(type)){ re=new RegExp('(?:^|[^\\w.%])%?'+type+'(\\d+)\\.([0-7])\\b','g'); var m3, last=null; while((m3=re.exec(text))){ var v=(+m3[1])*8+(+m3[2]); if(last===null||v>last) last=v; } if(last===null) return null; last++; return type+Math.floor(last/8)+'.'+(last%8); }
   return null;
 }
+/* derniers repères d'un type, du plus récent au plus ancien (avant le curseur d'abord, puis les autres notes) */
+function recentOf(type,c){
+  type=type.toUpperCase(); var src;
+  if(/^(DB|FC|FB|OB|UDT)$/.test(type)) src='\\b'+type+'\\s?(\\d+)\\b';
+  else if(/^[MIQ][BWD]$/.test(type)) src='(?:^|[^\\w.%])%?'+type+'\\s?(\\d+)\\b';
+  else if(/^[MIQ]$/.test(type)) src='(?:^|[^\\w.%])%?'+type+'(\\d+\\.[0-7])\\b';
+  else return [];
+  var out=[], seen={};
+  function scan(text){ var re=new RegExp(src,'gi'), l=[], m; while((m=re.exec(text))){ l.push({p:m.index,e:m.index+m[0].length,k:type+m[1].replace(/\s/g,'')}); } return l; }
+  function push(k){ if(!seen[k]){ seen[k]=1; out.push(k); } }
+  var v=ta.value, L=scan(v).filter(function(x){ return !(c&&x.e>=c.start&&x.p<=c.pos); });
+  L.filter(function(x){ return c&&x.e<=c.start; }).reverse().forEach(function(x){ push(x.k); });
+  L.filter(function(x){ return !c||x.p>c.pos; }).forEach(function(x){ push(x.k); });
+  st.notes.filter(function(n){ return n.id!==st.cur; }).sort(function(a,b){ return b.updated-a.updated; }).forEach(function(n){ scan(String(n.text||'')).reverse().forEach(function(x){ push(x.k); }); });
+  return out;
+}
 var AC={items:[],idx:0,moved:false,a:0,b:0,lineStart:false};
 function context(){
   var r=sel(); if(r.a!==r.b) return null;
@@ -3365,9 +3431,13 @@ function suggest(){
     return out;
   }
   if(!pre) return out;
-  var tm=P.match(/^(DB|FC|FB|OB|UDT|[MIQ][BWD]?)(\d*)$/);
-  if(tm){ var nx2=nextRef(tm[1]); if(nx2&&(!tm[2]||nx2.indexOf(P)===0)) add(nx2+(c.lineEmpty?' : ':''),nx2,'prochain numéro libre','next'); }
-  var I=allIndex();
+  var tm=P.match(/^(DB|FC|FB|OB|UDT|[MIQ][BWD]?)(\d*)$/), I=allIndex();
+  if(tm){
+    var rec=recentOf(tm[1],c).filter(function(k){ return k!==P&&(!tm[2]||k.indexOf(P)===0); });
+    if(rec[0]) add(rec[0],rec[0],'dernier utilisé'+(I.refs[rec[0]]&&I.refs[rec[0]].d?' · '+I.refs[rec[0]].d:''),'rec');
+    var nx2=nextRef(tm[1]); if(nx2&&(!tm[2]||nx2.indexOf(P)===0)) add(nx2+(c.lineEmpty?' : ':''),nx2,'prochain numéro libre','next');
+    rec.slice(1,4).forEach(function(k){ add(k,k,I.refs[k]?I.refs[k].d:'','rec'); });
+  }
   if(pre.length>=1&&/^[A-Za-z]/.test(pre)){
     Object.keys(I.refs).filter(function(k){ return k.indexOf(P)===0&&k!==P; }).sort(function(a,b){ return a.localeCompare(b,'fr',{numeric:true}); }).slice(0,6).forEach(function(k){ add(k,k,I.refs[k].d,'ref'); });
   }
@@ -3385,7 +3455,19 @@ function caretXY(pos){
   var m=$('nbMeas'); m.textContent=ta.value.slice(0,pos); var sp=document.createElement('span'); sp.textContent='​'; m.appendChild(sp);
   return {x:sp.offsetLeft,y:sp.offsetTop};
 }
+var DIG=['0','1','2','3','4','5','6','7','8','9'], BIT=['0','1','2','3','4','5','6','7'];
+function hlKeys(){
+  var r=sel(), v=ta.value, b=v.slice(v.lastIndexOf('\n',r.a-1)+1,r.a), H=[];
+  if(/\bDB\s?\d+\.?$/i.test(b)) H=['.DBX','.DBW','.DBD',' : '];
+  else if(/\bDBX\s?\d+$/i.test(b)) H=['.'];
+  else if(/(\bDBX\s?\d+|(?:^|[^A-Za-z0-9_.%])%?[MIQEA]\d+)\.$/i.test(b)) H=BIT;
+  else if(/(?:^|[^A-Za-z0-9_])%?(DB[XBWD]?|FC|FB|OB|UDT|SFC|SFB|[MIQEA][BWD]?|PI[BWD]|PQ[BWD])$/i.test(b)) H=DIG;
+  else if(/\bDB[BWD]\s?\d+$/i.test(b)||/\b(FC|FB|OB|UDT)\s?\d+$/i.test(b)||/(?:^|[^A-Za-z0-9_.%])%?[MIQ][BWD]\s?\d+$/i.test(b)||/(?:^|[^A-Za-z0-9_.%])%?[MIQ]\d+\.[0-7]$/i.test(b)||/\bDBX\s?\d+\.[0-7]$/i.test(b)) H=[' : '];
+  else if(/16#[0-9A-F_]*$/i.test(b)) H=DIG.concat([' -> hex']);
+  $('nbKeys').querySelectorAll('button[data-i]').forEach(function(k){ k.classList.toggle('hl',H.indexOf(k.getAttribute('data-i'))>=0); });
+}
 function acUpdate(){
+  hlKeys();
   var items=suggest(), c=context(); AC.items=items; AC.idx=0; AC.moved=false;
   if(c){ AC.a=c.start; AC.b=c.pos; }
   var strip=$('nbStrip');
@@ -3435,6 +3517,7 @@ function renderList(){
   $('nbList').innerHTML=L.length?L.map(function(n){ return '<button type="button" data-id="'+n.id+'" aria-current="'+(n.id===st.cur)+'"><b>'+esc(titleOf(n))+'</b><small><span>'+esc(when(n.updated))+'</span>'+(function(){ var k=String(n.text||'').split('\n').filter(isOpen).length; return k?'<span class="tc">⚠ '+k+'</span>':''; })()+'<span>'+esc(prevOf(n))+'</span></small></button>'; }).join('')
     :'<div class="none">'+(st.notes.length?'Aucune note ne contient « '+esc($('nbQ').value)+' ».':'Aucune note pour l’instant. Tapez directement dans la page : la note est créée et enregistrée toute seule.')+'</div>';
   $('nbTogL').textContent='Mes notes ('+st.notes.length+')';
+  if(typeof renderSel==='function'&&$('nbSel')) renderSel();
 }
 function open(id){
   var n=find(id); if(!n) return;
