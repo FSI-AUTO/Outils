@@ -1645,6 +1645,7 @@ html.full main.mods{flex:1;min-height:0}
             <button type="button" data-i="MW">MW</button><button type="button" data-i="M">M</button><button type="button" data-i="I">I</button><button type="button" data-i="Q">Q</button>
             <button type="button" data-i=".DBX">DBX</button><button type="button" data-i=".DBW">DBW</button><button type="button" data-i=".DBD">DBD</button><button type="button" data-i=" : " class="acc">:</button>
             <button type="button" data-i="16#">16#</button><button type="button" data-i=" -> hex">→hex</button><button type="button" data-i="ans">ans</button><button type="button" data-i="\ntotal\n" class="acc">Σ</button>
+            <button type="button" data-i=" NW" title="Réseau (network) d'un FC / FB">NW</button><button type="button" data-i="UDT">UDT</button><button type="button" data-i="T#">T#</button><button type="button" data-i="&quot;">"</button>
           </div>
           <div class="kb kkw">
             <button type="button" data-w=" → " class="ar">→</button><button type="button" data-w=" ← " class="ar">←</button><button type="button" data-w=" ↑ " class="ar">↑</button><button type="button" data-w=" ↓ " class="ar">↓</button><button type="button" data-w=" ⇒ " class="ar">⇒</button><button type="button" data-w=" ↔ " class="ar">↔</button>
@@ -1687,6 +1688,7 @@ html.full main.mods{flex:1;min-height:0}
         <div><code>TO CHECK · TODO · ? · NOK · HS</code><span>Mots-clés surlignés en orange : la ligne apparaît dans « À vérifier » tant qu'elle n'est pas marquée OK</span></div>
         <div><code>TRIG · POS · NEG · SET · RST · → ⇒</code><span>Touches de mots-clés du pavé (insérés avec les espaces). Aussi en autocomplétion</span></div>
         <div><code>Appui long sur DB10, MW20, I0.3…</code><span>Copie l'adresse dans le presse-papier (dans la note ou dans les Repères)</span></div>
+        <div><code>FC12 NW3 : description</code><span>Réseau d'un FC / FB (touche NW) : propose le dernier réseau noté et le suivant</span></div>
         <div><code>DB + Tab</code><span>Propose d'abord le dernier numéro utilisé, puis le suivant libre</span></div>
         <div><code>Pavé : Raccourcis / Clavier iPad</code><span>« abc » ou « ⌨ Clavier iPad » ouvre le clavier de l'iPad ; « 123 Raccourcis » revient au pavé seul</span></div>
       </div>
@@ -3155,7 +3157,7 @@ function analyse(text){
 /* ---------- repères S7 ---------- */
 var REFS=[
   {c:'db',g:'Blocs de données',re:/\b(DB\s?\d+)(?:\.(DB[XBWD]\s?\d+(?:\.[0-7])?))?/gi},
-  {c:'blk',g:'Blocs de code',re:/\b(FC|FB|OB|UDT|SFC|SFB)\s?(\d+)\b/gi},
+  {c:'blk',g:'Blocs de code',re:/\b(FC|FB|OB|UDT|SFC|SFB)\s?(\d+)(?:\s*(?:NW|Network|R[ée]seau)\s?\d+)?\b/gi},
   {c:'mem',g:'Mémentos et E/S',re:/(?:^|[^\w.%])%?((?:M|I|Q|E|A|PI|PQ|PE|PA)(?:[BWD]\s?\d+|\d+\.[0-7]))\b/g},
   {c:'ip',g:'Adresses IP',re:/\b(?:25[0-5]|2[0-4]\d|1?\d?\d)(?:\.(?:25[0-5]|2[0-4]\d|1?\d?\d)){3}\b/g}
 ];
@@ -3169,7 +3171,7 @@ function tokensOf(line){
   spans.sort(function(a,b){ return a.s-b.s||b.e-a.e; });
   var o=[], last=-1; spans.forEach(function(x){ if(x.s>=last){ o.push(x); last=x.e; } }); return o;
 }
-function normRef(t){ return t.replace(/\s+/g,'').toUpperCase().replace(/^%/,''); }
+function normRef(t){ return t.replace(/\s+/g,'').toUpperCase().replace(/^%/,'').replace(/(\d)(?:NW|NETWORK|R[ÉE]SEAU)(\d+)$/,'$1 NW$2'); }
 /* mots-clés de suivi : c = à vérifier, o = fait, n = défaut, i = info. ci : insensible à la casse ; sinon MAJUSCULES seulement */
 var KWS=[
   {c:'kwc',ci:1,w:['TO CHECK','TO DO','TODO','À VÉRIFIER','A VERIFIER','À FAIRE','A FAIRE','???','??','?']},
@@ -3295,6 +3297,7 @@ function insert(s){
   var r=sel(), v=ta.value, before=v.slice(0,r.a);
   if(s==='\ntotal\n') s=(before&&!/\n$/.test(before)?'\n':'')+'total\n';
   if(/^\.DB[XBWD]$/.test(s)&&!/DB\s?\d+$/i.test(before)) s=s.slice(1);
+  if(s===' NW'&&(!before||/\s$/.test(before))) s='NW';
   replaceRange(r.a,r.b,s);
 }
 function keyCmd(k){
@@ -3432,6 +3435,17 @@ function suggest(){
   }
   if(!pre) return out;
   var tm=P.match(/^(DB|FC|FB|OB|UDT|[MIQ][BWD]?)(\d*)$/), I=allIndex();
+  var nw=c.before.match(/\b((?:FC|FB|OB)\s?\d+)\s*NW(\d*)$/i);
+  if(nw){
+    var blk=nw[1].replace(/\s/g,'').toUpperCase(), re=new RegExp('\\b'+blk.replace(/^(FC|FB|OB)/,'$1\\s?')+'\\s*(?:NW|Network|R[ée]seau)\\s?(\\d+)','gi'), seenN={}, lst=[], mx=0, mm;
+    var txts=[ta.value.slice(0,c.start)].concat(st.notes.filter(function(n){ return n.id!==st.cur; }).sort(function(a,b){ return b.updated-a.updated; }).map(function(n){ return String(n.text||''); }));
+    txts.forEach(function(t,ti){ var l=[]; re.lastIndex=0; while((mm=re.exec(t))){ l.push(+mm[1]); mx=Math.max(mx,+mm[1]); } (ti===0?l.reverse():l.reverse()).forEach(function(n){ if(!seenN[n]){ seenN[n]=1; lst.push(n); } }); });
+    lst=lst.filter(function(n){ return !nw[2]||String(n).indexOf(nw[2])===0; });
+    if(lst[0]) add('NW'+lst[0],'NW'+lst[0],'dernier réseau noté dans '+blk,'rec');
+    if(!nw[2]||String(mx+1).indexOf(nw[2])===0) add('NW'+(mx+1),'NW'+(mx+1),mx?'réseau suivant':'premier réseau','next');
+    lst.slice(1,4).forEach(function(n){ add('NW'+n,'NW'+n,blk,'rec'); });
+    return out.slice(0,7);
+  }
   if(tm){
     var rec=recentOf(tm[1],c).filter(function(k){ return k!==P&&(!tm[2]||k.indexOf(P)===0); });
     if(rec[0]) add(rec[0],rec[0],'dernier utilisé'+(I.refs[rec[0]]&&I.refs[rec[0]].d?' · '+I.refs[rec[0]].d:''),'rec');
@@ -3461,7 +3475,9 @@ function hlKeys(){
   if(/\bDB\s?\d+\.?$/i.test(b)) H=['.DBX','.DBW','.DBD',' : '];
   else if(/\bDBX\s?\d+$/i.test(b)) H=['.'];
   else if(/(\bDBX\s?\d+|(?:^|[^A-Za-z0-9_.%])%?[MIQEA]\d+)\.$/i.test(b)) H=BIT;
-  else if(/(?:^|[^A-Za-z0-9_])%?(DB[XBWD]?|FC|FB|OB|UDT|SFC|SFB|[MIQEA][BWD]?|PI[BWD]|PQ[BWD])$/i.test(b)) H=DIG;
+  else if(/\b(FC|FB)\s?\d+$/i.test(b)) H=[' NW',' : '];
+  else if(/(?:^|[^A-Za-z0-9_])%?(DB[XBWD]?|FC|FB|OB|UDT|SFC|SFB|NW|[MIQEA][BWD]?|PI[BWD]|PQ[BWD])$/i.test(b)) H=DIG;
+  else if(/\bNW\s?\d+$/i.test(b)) H=[' : '];
   else if(/\bDB[BWD]\s?\d+$/i.test(b)||/\b(FC|FB|OB|UDT)\s?\d+$/i.test(b)||/(?:^|[^A-Za-z0-9_.%])%?[MIQ][BWD]\s?\d+$/i.test(b)||/(?:^|[^A-Za-z0-9_.%])%?[MIQ]\d+\.[0-7]$/i.test(b)||/\bDBX\s?\d+\.[0-7]$/i.test(b)) H=[' : '];
   else if(/16#[0-9A-F_]*$/i.test(b)) H=DIG.concat([' -> hex']);
   $('nbKeys').querySelectorAll('button[data-i]').forEach(function(k){ k.classList.toggle('hl',H.indexOf(k.getAttribute('data-i'))>=0); });
