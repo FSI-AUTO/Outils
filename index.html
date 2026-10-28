@@ -590,6 +590,7 @@ html.full main.mods{flex:1;min-height:0}
 @media (min-width:1241px){
   #m-notes .nb.full .kkw button.lg{font-size:calc(11.5px*var(--kf))}
   #m-notes .nb.full .kkw button{font-size:calc(13px*var(--kf))}
+  #m-notes .nb.full .kkw button.ar{font-size:calc(22px*var(--kf))}
 }
 #m-notes .nhd .btn[aria-pressed="true"]{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
 #m-notes .nnsel{display:none;max-width:220px;font:inherit;font-size:13.5px;border:1px solid var(--line);background:var(--raise);color:inherit;border-radius:6px;padding:5px 8px}
@@ -660,13 +661,17 @@ html.full main.mods{flex:1;min-height:0}
   #m-notes .kext{order:1}
   #m-notes .kkw{order:2}
   #m-notes .ksh{order:3}
+  #m-notes .kaz{grid-column:1/-1;order:-1}
 }
 @media (max-width:600px){
   #m-notes .kkw,#m-notes .ksh{grid-column:1/-1}
 }
 #m-notes .kb{display:grid;gap:6px;min-width:0;align-content:start}
 #m-notes .ksh,#m-notes .knum{grid-template-columns:repeat(4,minmax(0,1fr))}
-#m-notes .kext{grid-template-columns:repeat(3,minmax(0,1fr))}
+#m-notes .kext{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"lp rp bs" "eq pc pw" "sq en en" "sp en en" "le ri ab"}
+#m-notes .kpad .kb button.fn.ken{height:auto;min-height:calc(var(--kh)*2 + 6px);background:var(--pri);border-color:var(--pri);color:var(--pri-ink);font-size:calc(30px*var(--kf))}
+#m-notes .kpad .kb button.fn.ken:active{background:var(--sky);color:var(--pri-ink)}
+#m-notes .kb button.kabc{font-family:var(--f-ui);font-size:calc(16px*var(--kf));font-weight:600}
 #m-notes .kpad{--kh:46px;--kf:1}
 #m-notes .kpad.ks-l{--kh:58px;--kf:1.17}
 #m-notes .kpad.ks-xl{--kh:72px;--kf:1.35}
@@ -691,6 +696,17 @@ html.full main.mods{flex:1;min-height:0}
 #m-notes .ksh{order:1}
 #m-notes .knum{order:2}
 #m-notes .kext{order:3}
+#m-notes .kaz{display:none;order:0;grid-column:span 2;grid-template-columns:repeat(10,minmax(0,1fr))}
+#m-notes .kpad.letters .kaz{display:grid}
+#m-notes .kpad.letters .kkw,#m-notes .kpad.letters .ksh{display:none}
+#m-notes .kaz button{font-family:var(--f-ui);font-size:calc(20px*var(--kf));font-weight:500}
+#m-notes .kaz.up button[data-l]{text-transform:uppercase}
+#m-notes .kaz button.kshift.on{background:var(--sky-soft);border-color:var(--sky);color:var(--sky-ink)}
+#m-notes .kaz button.kshift.lock{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+#m-notes .kaz .kwide3{grid-column:span 3}
+#m-notes .kaz .kspace{grid-column:span 5;font-family:var(--f-ui);font-size:calc(14px*var(--kf));color:var(--muted)}
+#m-notes .kpad .kaz button.fn.ken2{grid-column:span 2;background:var(--pri);border-color:var(--pri);color:var(--pri-ink);font-size:calc(26px*var(--kf))}
+#m-notes .kpad.kbmode .kaz{display:none!important}
 #m-notes .kpad.kbmode .knum,#m-notes .kpad.kbmode .kext{display:none}
 #m-notes .kpad.kbmode .kgrid{grid-template-columns:minmax(0,1fr)!important}
 #m-notes .kpad.kbmode .ksh,#m-notes .kpad.kbmode .kkw{grid-template-columns:repeat(auto-fill,minmax(calc(68px*var(--kf)),1fr))}
@@ -1634,6 +1650,7 @@ html.full main.mods{flex:1;min-height:0}
       <div class="kpad" id="nbPad">
         <div class="kstrip" id="nbStrip" aria-label="Suggestions"></div>
         <div class="kbar">
+          <div class="seg" role="group" aria-label="Disposition" id="nbLay"><button type="button" data-v="s7">Raccourcis</button><button type="button" data-v="az">AZERTY</button></div>
           <div class="seg" role="group" aria-label="Taille des touches" id="nbSize"><button type="button" data-v="n" title="Touches normales">A</button><button type="button" data-v="l" title="Grandes touches">A+</button><button type="button" data-v="xl" title="Très grandes touches">A++</button></div>
           <span class="sp"></span>
           <button type="button" class="btn" id="nbMode" aria-pressed="false" hidden>⌨ Clavier iPad</button>
@@ -1654,6 +1671,13 @@ html.full main.mods{flex:1;min-height:0}
             <button type="button" data-w="ON">ON</button><button type="button" data-w="OFF">OFF</button><button type="button" data-w="AUTO">AUTO</button><button type="button" data-w="MANU">MANU</button><button type="button" data-w="TON">TON</button><button type="button" data-w="TOF">TOF</button>
             <button type="button" data-w="ALARME" class="lg">ALARME</button><button type="button" data-w="DÉFAUT" class="lg">DÉFAUT</button><button type="button" data-w="FAIT" class="g">FAIT</button><button type="button" data-w="IHM">IHM</button><button type="button" data-w="ET">ET</button><button type="button" data-w="OU">OU</button>
           </div>
+          <div class="kb kaz" id="nbAz">
+            <button type="button" data-l="a">a</button><button type="button" data-l="z">z</button><button type="button" data-l="e">e</button><button type="button" data-l="r">r</button><button type="button" data-l="t">t</button><button type="button" data-l="y">y</button><button type="button" data-l="u">u</button><button type="button" data-l="i">i</button><button type="button" data-l="o">o</button><button type="button" data-l="p">p</button>
+            <button type="button" data-l="q">q</button><button type="button" data-l="s">s</button><button type="button" data-l="d">d</button><button type="button" data-l="f">f</button><button type="button" data-l="g">g</button><button type="button" data-l="h">h</button><button type="button" data-l="j">j</button><button type="button" data-l="k">k</button><button type="button" data-l="l">l</button><button type="button" data-l="m">m</button>
+            <button type="button" data-k="shift" class="fn kshift" aria-label="Majuscule" id="nbShift">⇧</button><button type="button" data-l="w">w</button><button type="button" data-l="x">x</button><button type="button" data-l="c">c</button><button type="button" data-l="v">v</button><button type="button" data-l="b">b</button><button type="button" data-l="n">n</button><button type="button" data-l="'">'</button><button type="button" data-l="-">-</button><button type="button" data-k="bs" class="fn" aria-label="Effacer">⌫</button>
+            <button type="button" data-l="é">é</button><button type="button" data-l="è">è</button><button type="button" data-l="à">à</button><button type="button" data-l="ç">ç</button><button type="button" data-l="ù">ù</button><button type="button" data-l=":">:</button><button type="button" data-l=";">;</button><button type="button" data-l="?">?</button><button type="button" data-l="!">!</button><button type="button" data-l="@">@</button>
+            <button type="button" data-k="letters" class="fn kabc kwide3">S7 · mots</button><button type="button" data-i=" " class="kspace" aria-label="Espace">espace</button><button type="button" data-k="nl" class="fn ken2" aria-label="Nouvelle ligne">↵</button>
+          </div>
           <div class="kb knum">
             <button type="button" data-i="7">7</button><button type="button" data-i="8">8</button><button type="button" data-i="9">9</button><button type="button" data-i="/" class="op">÷</button>
             <button type="button" data-i="4">4</button><button type="button" data-i="5">5</button><button type="button" data-i="6">6</button><button type="button" data-i="*" class="op">×</button>
@@ -1661,10 +1685,11 @@ html.full main.mods{flex:1;min-height:0}
             <button type="button" data-i="0">0</button><button type="button" data-i=",">,</button><button type="button" data-i=".">.</button><button type="button" data-i="+" class="op">+</button>
           </div>
           <div class="kb kext">
-            <button type="button" data-i="(">(</button><button type="button" data-i=")">)</button><button type="button" data-k="bs" aria-label="Effacer" class="fn">⌫</button>
-            <button type="button" data-i=" = ">=</button><button type="button" data-i="%">%</button><button type="button" data-k="nl" aria-label="Nouvelle ligne" class="fn">↵</button>
-            <button type="button" data-i="^">x<sup>y</sup></button><button type="button" data-i="sqrt(">√</button><button type="button" data-i=" ">␣</button>
-            <button type="button" data-k="left" aria-label="Curseur à gauche" class="fn">←</button><button type="button" data-k="right" aria-label="Curseur à droite" class="fn">→</button><button type="button" data-k="mode" aria-label="Basculer vers le clavier de l'iPad" class="fn" id="nbAbc">abc</button>
+            <button type="button" data-i="(" style="grid-area:lp">(</button><button type="button" data-i=")" style="grid-area:rp">)</button><button type="button" data-k="bs" aria-label="Effacer" class="fn" style="grid-area:bs">⌫</button>
+            <button type="button" data-i=" = " style="grid-area:eq">=</button><button type="button" data-i="%" style="grid-area:pc">%</button><button type="button" data-i="^" style="grid-area:pw">x<sup>y</sup></button>
+            <button type="button" data-i="sqrt(" style="grid-area:sq">√</button><button type="button" data-k="nl" aria-label="Nouvelle ligne" class="fn ken" style="grid-area:en">↵</button>
+            <button type="button" data-i=" " style="grid-area:sp">␣</button>
+            <button type="button" data-k="left" aria-label="Curseur à gauche" class="fn" style="grid-area:le">←</button><button type="button" data-k="right" aria-label="Curseur à droite" class="fn" style="grid-area:ri">→</button><button type="button" data-k="letters" aria-label="Clavier lettres AZERTY" class="fn kabc" id="nbAbc" style="grid-area:ab">abc</button>
           </div>
         </div>
       </div>
@@ -1690,6 +1715,7 @@ html.full main.mods{flex:1;min-height:0}
         <div><code>Appui long sur DB10, MW20, I0.3…</code><span>Copie l'adresse dans le presse-papier (dans la note ou dans les Repères)</span></div>
         <div><code>FC12 NW3 : description</code><span>Réseau d'un FC / FB (touche NW) : propose le dernier réseau noté et le suivant</span></div>
         <div><code>DB + Tab</code><span>Propose d'abord le dernier numéro utilisé, puis le suivant libre</span></div>
+        <div><code>abc · AZERTY</code><span>Clavier lettres intégré avec le pavé numérique. ⇧ : une majuscule, double appui : verrouillage</span></div>
         <div><code>Pavé : Raccourcis / Clavier iPad</code><span>« abc » ou « ⌨ Clavier iPad » ouvre le clavier de l'iPad ; « 123 Raccourcis » revient au pavé seul</span></div>
       </div>
     </details>
@@ -3308,6 +3334,8 @@ function keyCmd(k){
   else if(k==='right') setSel(Math.min(v.length,r.b+1));
   else if(k==='hide') setPad(false);
   else if(k==='mode'){ setMode(MODE==='kb'?'pad':'kb',true); return; }
+  else if(k==='letters'){ LAY=LAY==='az'?'s7':'az'; lsSet(LAYK,LAY); applyPad(); }
+  else if(k==='shift'){ var now=Date.now(); if(SHIFT&&now-shiftT<350){ CAPS=true; SHIFT=false; } else if(CAPS){ CAPS=false; SHIFT=false; } else SHIFT=!SHIFT; shiftT=now; applyShift(); }
   acUpdate();
 }
 function insertWord(w){
@@ -3319,7 +3347,8 @@ function insertWord(w){
 var pd=$('nbKeys');
 pd.addEventListener('pointerdown',function(e){ if(e.target.closest('button')) e.preventDefault(); });
 pd.addEventListener('mousedown',function(e){ if(e.target.closest('button')) e.preventDefault(); });
-pd.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; if(b.hasAttribute('data-k')) keyCmd(b.getAttribute('data-k')); else if(b.hasAttribute('data-w')){ insertWord(b.getAttribute('data-w')); acUpdate(); } else insert(b.getAttribute('data-i')); });
+pd.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; if(b.hasAttribute('data-k')) keyCmd(b.getAttribute('data-k')); else if(b.hasAttribute('data-w')){ insertWord(b.getAttribute('data-w')); acUpdate(); }
+  else if(b.hasAttribute('data-l')){ var ch=b.getAttribute('data-l'); insert(SHIFT||CAPS?ch.toUpperCase():ch); if(SHIFT&&!CAPS){ SHIFT=false; applyShift(); } } else insert(b.getAttribute('data-i')); });
 var bar=document.querySelector('.kbar');
 bar.addEventListener('pointerdown',function(e){ if(e.target.closest('button')) e.preventDefault(); });
 bar.addEventListener('mousedown',function(e){ if(e.target.closest('button')) e.preventDefault(); });
@@ -3328,6 +3357,9 @@ var TOUCH=(navigator.maxTouchPoints||0)>0||(window.matchMedia&&window.matchMedia
 function lsGet(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:v; }catch(_){ return d; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(_){} }
 function pressed(box,v){ box.querySelectorAll('[data-v]').forEach(function(b){ b.setAttribute('aria-pressed',String(b.getAttribute('data-v')===v)); }); }
+var LAYK='fsi-bloc-notes-disposition', LAY=lsGet(LAYK,'s7'), SHIFT=false, CAPS=false, shiftT=0;
+function applyShift(){ var az=$('nbAz'), sh=$('nbShift'); if(!az) return; az.classList.toggle('up',SHIFT||CAPS); if(sh){ sh.classList.toggle('on',SHIFT); sh.classList.toggle('lock',CAPS); sh.setAttribute('aria-pressed',String(SHIFT||CAPS)); } }
+$('nbLay').addEventListener('click',function(e){ var b=e.target.closest('[data-v]'); if(!b) return; LAY=b.getAttribute('data-v'); lsSet(LAYK,LAY); applyPad(); });
 var SIZE=lsGet(SIZEK,TOUCH?'l':'n'), MODE=TOUCH?lsGet(MODEK,'pad'):'kb';
 function applyPad(){
   var pad=$('nbPad');
@@ -3335,7 +3367,9 @@ function applyPad(){
   pad.classList.toggle('kbmode',TOUCH&&MODE==='kb');
   $('nbMode').hidden=!TOUCH; $('nbMode').setAttribute('aria-pressed',String(MODE==='kb'));
   $('nbMode').textContent=MODE==='kb'?'123 Raccourcis':'⌨ Clavier iPad';
-  var abc=$('nbAbc'); if(abc){ abc.textContent=TOUCH?'abc':'▾'; abc.setAttribute('data-k',TOUCH?'mode':'hide'); abc.setAttribute('aria-label',TOUCH?'Clavier de l\'iPad':'Masquer le clavier'); }
+  pad.classList.toggle('letters',LAY==='az'); pressed($('nbLay'),LAY);
+  var abc=$('nbAbc'); if(abc){ abc.textContent=LAY==='az'?'S7':'abc'; abc.setAttribute('aria-label',LAY==='az'?'Revenir aux raccourcis S7':'Clavier lettres AZERTY'); }
+  applyShift();
   ta.setAttribute('inputmode',TOUCH&&MODE==='pad'&&!pad.hidden?'none':'text');
   dock();
 }

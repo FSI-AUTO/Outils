@@ -1,7 +1,7 @@
-/* Boîte à outils — service worker. Version : 4ecb9b0f2b
+/* Boîte à outils — service worker. Version : 95cb185fd6
    Page : réseau d'abord (la dernière version quand il y a du réseau), cache sinon.
    Icônes et manifeste : cache d'abord. */
-var CACHE='outils-fsi-4ecb9b0f2b';
+var CACHE='outils-fsi-95cb185fd6';
 var FILES=['./','./index.html','./manifest.webmanifest','./icons/apple-touch-icon.png','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png'];
 self.addEventListener('install',function(e){
   e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(FILES); }).then(function(){ return self.skipWaiting(); }));
