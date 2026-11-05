@@ -1552,6 +1552,34 @@ html.full main.mods{flex:1;min-height:0}
 #m-wire .tpow{margin-top:5px}
 #m-wire .tnone{margin-top:6px;font-size:12px;color:var(--muted);border:1px dashed var(--line);border-radius:6px;padding:6px 8px;text-align:center}
 #m-wire .tt i.pair{font-style:normal;font-family:var(--f-ui);font-size:10.5px;font-weight:700;background:var(--sky-soft);color:var(--sky-ink);border-radius:99px;padding:1px 6px;margin-left:3px}
+#m-wire .tt.hl{outline:2px solid var(--sky);outline-offset:1px;box-shadow:0 0 0 4px var(--sky-soft)}
+#m-wire .tt.dim{opacity:.42}
+#m-wire .wx{grid-column:1/-1;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+#m-wire .wxsel{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+#m-wire .wch button{font-family:var(--f-mono);font-size:13px;padding:5px 9px}
+#m-wire .wxbody{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+#m-wire .wxpic{max-width:720px}
+#m-wire .wxpic{border:1px solid var(--line);border-radius:10px;background:var(--raise);padding:6px}
+#m-wire .wxs{display:block;width:100%;height:auto;color:var(--ink)}
+#m-wire .wxs .wt rect{fill:var(--panel);stroke:var(--line)}
+#m-wire .wxs .wt.ext rect{stroke-dasharray:4 3;fill:transparent}
+#m-wire .wxs .wt circle{fill:var(--raise);stroke:var(--line)}
+#m-wire .wxs text{fill:currentColor;font-family:var(--f-ui)}
+#m-wire .wxs .n{font-family:var(--f-mono);font-size:11px;font-weight:700;text-anchor:middle}
+#m-wire .wxs .l{font-family:var(--f-mono);font-size:13px;font-weight:700}
+#m-wire .wxs .d{font-size:10px;opacity:.65}
+#m-wire .wxs .wd rect{fill:var(--sky-soft);stroke:var(--sky)}
+#m-wire .wxs .pin{fill:var(--paper);stroke:currentColor;stroke-width:1.6}
+#m-wire .wxs .p{font-family:var(--f-mono);font-size:11.5px;font-weight:700}
+#m-wire .wxs .dn{font-size:12.5px;font-weight:700}
+#m-wire .wxs .ds{font-size:10.5px;opacity:.7}
+#m-wire .wxs .ic circle,#m-wire .wxs .ic rect,#m-wire .wxs .ic path{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#m-wire .wxs .ic .f{fill:currentColor}
+#m-wire .wxs .ic .dash{stroke-dasharray:3 3}
+#m-wire .wxs .it{font-size:10px;font-weight:700;text-anchor:middle}
+#m-wire .wxn{font-size:13px;line-height:1.45;margin:8px 0 0}
+#m-wire .wxn.leg{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
+#m-wire .wxn.leg i{display:inline-block;width:18px;height:3px;border-radius:2px;margin-right:4px;vertical-align:middle}
 #m-wire .wtop{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 #m-wire .wtop .seg{flex:0 1 360px}
 #m-wire .wtop .sp{flex:1}
@@ -9045,18 +9073,42 @@ var SP=[
  {id:'didq8st',cat:'DI/DQ',n:'DI/DQ 8x24VDC/0.5A ST',ref:'6ES7133-6BH00-0BA0',bu:['A0'],cc:'CC00',
   t:T(seq(1,'DI#',0,8,'entrée voie #').concat(seq(9,'DQ#',0,8,'sortie voie #'))),ok:1,src:SRC_T+' (02/2024, A5E52173282-AA).',
   w:['1 fil sur les bornes du module. 2/3 fils : 24 V / M via AUX ou PotDis.']},
+ {id:'ai2u',cat:'AI',n:'AI 2xU ST',ref:'6ES7134-6FB00-0BA1',bu:['A0','A1'],cc:'—',
+  t:T([[1,'U0+','tension + voie 0'],[2,'U1+','tension + voie 1'],[3,'U0−','tension − voie 0'],[4,'U1−','tension − voie 1']].concat(seq(5,'RES',0,12,'réserve, ne pas câbler'))),ok:1,
+  src:SRC_T+' (04/2026, A5E36104728-AB).',
+  w:['Tension voie n : Un+ / Un−.','Bornes 5 à 16 : réserve, ne pas câbler.']},
+ {id:'ai8u',cat:'AI',n:'AI 8xU BA',ref:'6ES7134-6FF00-0AA1',bu:['A0','A1'],cc:'CC02',
+  t:T(seq(1,'U#+',0,8,'tension + voie #').concat(seq(9,'Mana',0,8,'masse analogique'))),ok:1,
+  src:'Schéma de raccordement du manuel Siemens (03/2015, A5E34941660-AA).',
+  w:['Entrées asymétriques : Un+ (bornes 1–8) contre Mana (bornes 9–16, communes).','Capteur de température de la BaseUnit A1 non exploité.']},
+ {id:'ai4i',cat:'AI',n:'AI 4xI 2-/4-wire ST',ref:'6ES7134-6GD01-0BA1',bu:['A0','A1'],cc:'—',
+  t:T(seq(1,'1I#+',0,4,'courant + voie # (4 fils)').concat(seq(5,'1I#−',0,4,'courant − voie # (4 fils)'),seq(9,'UV#',0,4,'alim. transmetteur voie #'),seq(13,'2I#+',0,4,'courant + voie # (2 fils)'))),ok:1,
+  src:SRC_T+' (09/2026, A5E03551866-AG).',
+  w:['2 fils : UVn → transmetteur → 2In+.','4 fils : transmetteur alimenté à part, signal sur 1In+ / 1In−.']},
+ {id:'ai8i',cat:'AI',n:'AI 8xI 2-/4-wire BA',ref:'6ES7134-6GF00-0AA1',bu:['A0','A1'],cc:'CC01',
+  t:T(seq(1,'I#+',0,8,'courant + voie #').concat(seq(9,'UV',0,8,'alim. transmetteur 24 V'))),ok:1,
+  src:'Schémas de raccordement du manuel Siemens (03/2015, A5E34941201-AA).',
+  w:['Entrées asymétriques (référence M).','2 fils : UV → transmetteur → In+.','4 fils : BaseUnit A0 avec AUX, une borne AUX pontée sur M.']},
  {id:'ai4ui',cat:'AI',n:'AI 4xU/I 2-wire ST',ref:'6ES7134-6HD01-0BA1',bu:['A0','A1'],cc:'CC03',
   t:T([[1,'U0+','tension + voie 0'],[2,'U1+','tension + voie 1'],[3,'U2+','tension + voie 2'],[4,'U3+','tension + voie 3'],[5,'U0−','tension − voie 0'],[6,'U1−','tension − voie 1'],[7,'U2−','tension − voie 2'],[8,'U3−','tension − voie 3'],[9,'UV0','alim. transmetteur voie 0'],[10,'UV1','alim. transmetteur voie 1'],[11,'UV2','alim. transmetteur voie 2'],[12,'UV3','alim. transmetteur voie 3'],[13,'I0+','courant + voie 0'],[14,'I1+','courant + voie 1'],[15,'I2+','courant + voie 2'],[16,'I3+','courant + voie 3']]),ok:1,
-  src:SRC_T+' (édition 09/2026, A5E03572837-AG).',
+  src:SRC_T+' (09/2026, A5E03572832-AG).',
   w:['Tension voie n : Un+ / Un−.','Transmetteur 2 fils voie n : UVn (24 V) → transmetteur → In+.','4 fils non supporté. UVn = L+ du groupe, limité et protégé.']},
  {id:'ai2i',cat:'AI',n:'AI 2xI 2/4-wire ST',ref:'6ES7134-6GB00-0BA1',bu:['A0','A1'],cc:'CC05',
   t:T([[1,'RES','réservé'],[2,'RES','réservé'],[3,'RES','réservé'],[4,'RES','réservé'],[5,'I0+','courant + voie 0'],[6,'I1+','courant + voie 1'],[7,'I0−','courant − voie 0'],[8,'I1−','courant − voie 1'],[9,'1UV0','alim. 2 fils voie 0'],[10,'1UV1','alim. 2 fils voie 1'],[11,'RES','réservé'],[12,'RES','réservé'],[13,'2UV0','alim. 4 fils voie 0'],[14,'2UV1','alim. 4 fils voie 1'],[15,'2M0','masse 4 fils voie 0'],[16,'2M1','masse 4 fils voie 1']]),ok:1,
-  src:SRC_T+' (04/2026, A5E36104399-AB). Utilisation des bornes par type de transmetteur d\'après les libellés : vérifiez sur le schéma du manuel.',
+  src:SRC_T+' (04/2026, A5E36104399-AB).',
   w:['2 fils voie n : 1UVn → transmetteur → In+ / In−.','4 fils voie n : alimentation par 2UVn / 2Mn, signal sur In+ / In−.']},
+ {id:'aihf',cat:'AI',n:'AI 2xU/I 2-/4-wire HF',ref:'6ES7134-6HB00-0CA1',bu:['A0','A1'],cc:'—',
+  t:T([[1,'U0+','tension + voie 0'],[2,'U1+','tension + voie 1'],[3,'U0−','tension − voie 0'],[4,'U1−','tension − voie 1'],[5,'I0+','courant + voie 0'],[6,'I1+','courant + voie 1'],[7,'I0−','courant − voie 0'],[8,'I1−','courant − voie 1'],[9,'1UV0','alim. 2 fils voie 0'],[10,'1UV1','alim. 2 fils voie 1'],[11,'1M0','masse 1UV0'],[12,'1M1','masse 1UV1'],[13,'2UV0','alim. 4 fils voie 0'],[14,'2UV1','alim. 4 fils voie 1'],[15,'2M0','masse 2UV0'],[16,'2M1','masse 2UV1']]),ok:1,
+  src:SRC_T+' (09/2026, A5E51055079-AD).',
+  w:['Voies isolées entre elles.','Ne jamais relier In+ / In− à Mn : défaut du module.']},
+ {id:'aihs',cat:'AI',n:'AI 2xU/I 2-/4-wire HS',ref:'6ES7134-6HB00-0DA1',bu:['A0','A1'],cc:'—',
+  t:T([[1,'U0+','tension + voie 0'],[2,'U1+','tension + voie 1'],[3,'U0−','tension − voie 0'],[4,'U1−','tension − voie 1'],[5,'I0+','courant + voie 0'],[6,'I1+','courant + voie 1'],[7,'I0−','courant − voie 0'],[8,'I1−','courant − voie 1'],[9,'UV0','alim. 2 fils voie 0'],[10,'UV1','alim. 2 fils voie 1'],[11,'M0','masse UV0'],[12,'M1','masse UV1']].concat(seq(13,'RES',0,4,'réserve, ne pas câbler'))),ok:1,
+  src:SRC_T+' (09/2026, A5E03576060-AH).',
+  w:['Module rapide (HS), voies isolées.','Ne jamais relier In à Mn : défaut du module.']},
  {id:'ai4rtd',cat:'AI',n:'AI 4xRTD/TC 2/3/4-wire HF',ref:'6ES7134-6JD00-0CA1',bu:['A0','A1'],cc:'—',
   t:T([[1,'M0+','mesure + voie 0'],[2,'M1+','mesure + voie 1'],[3,'M2+','mesure + voie 2'],[4,'M3+','mesure + voie 3'],[5,'M0−','mesure − voie 0'],[6,'M1−','mesure − voie 1'],[7,'M2−','mesure − voie 2'],[8,'M3−','mesure − voie 3'],[9,'IC0+','courant constant + voie 0'],[10,'IC1+','courant constant + voie 1'],[11,'IC2+','courant constant + voie 2'],[12,'IC3+','courant constant + voie 3'],[13,'IC0−','courant constant − voie 0'],[14,'IC1−','courant constant − voie 1'],[15,'IC2−','courant constant − voie 2'],[16,'IC3−','courant constant − voie 3']]),ok:1,
-  src:SRC_T+' (04/2026, A5E03573292-AH). Schémas 2/3 fils en image seulement : vérifiez les ponts sur le manuel.',
-  w:['Voie n : bornes n+1 (M+), n+5 (M−), n+9 (IC+), n+13 (IC−).','Thermocouple / tension : Mn+ / Mn−.','RTD 4 fils : ICn+ et Mn+ d\'un côté, Mn− et ICn− de l\'autre.','Soudure froide interne : BaseUnit A1 (…/T).']},
+  src:SRC_T+' (04/2026, A5E03573289-AH).',
+  w:['Voie n : bornes n+1 (M+), n+5 (M−), n+9 (IC+), n+13 (IC−).','Soudure froide interne : BaseUnit A1 (…/T).']},
  {id:'aq4ui',cat:'AQ',n:'AQ 4xU/I ST',ref:'6ES7135-6HD00-0BA1',bu:['A0','A1'],cc:'CC00',
   t:T([[1,'Q0+','sortie + voie 0'],[2,'Q1+','sortie + voie 1'],[3,'Q2+','sortie + voie 2'],[4,'Q3+','sortie + voie 3'],[5,'Q0−','sortie − voie 0'],[6,'Q1−','sortie − voie 1'],[7,'Q2−','sortie − voie 2'],[8,'Q3−','sortie − voie 3'],[9,'S0+','ligne de mesure + voie 0'],[10,'S1+','ligne de mesure + voie 1'],[11,'S2+','ligne de mesure + voie 2'],[12,'S3+','ligne de mesure + voie 3'],[13,'S0−','ligne de mesure − voie 0'],[14,'S1−','ligne de mesure − voie 1'],[15,'S2−','ligne de mesure − voie 2'],[16,'S3−','ligne de mesure − voie 3']]),ok:1,
   src:SRC_T+' (07/2014, A5E03573365-AC).',
@@ -9136,10 +9188,107 @@ var S=[
 ];
 var SBY={}; S.forEach(function(m){ SBY[m.id]=m; });
 
+/* ---------- exemples de câblage (AI / F-DI) ----------
+   ligne : [borne (n° ou 'L+ext' / 'Mext' / 'AUX'), broche appareil, n° appareil, couleur p/m/s, clé de pont] */
+function R(t,pin,d,c,j){ return {t:t,pin:pin,d:d||0,c:c||'s',j:j||''}; }
+var DV={
+  u:function(r){ return {k:'vs',n:'Capteur tension',s:r||'0–10 V / ±10 V'}; },
+  t2:function(){ return {k:'tx',n:'Transmetteur 2 fils',s:'4–20 mA (passif)'}; },
+  t3:function(){ return {k:'tx',n:'Transmetteur 3 fils',s:'actif, 0 V commun'}; },
+  t4:function(s){ return {k:'tx',n:'Transmetteur 4 fils',s:s||'4–20 mA (actif)'}; },
+  rtd:function(w){ return {k:'rtd',n:'Sonde RTD '+w+' fils',s:'Pt100 / Pt1000 / Ni…'}; },
+  tc:function(){ return {k:'tc',n:'Thermocouple',s:'J, K, T…'}; },
+  sw:function(n,s){ return {k:'sw',n:n,s:s||''}; },
+  sw2:function(){ return {k:'sw2',n:'Capteur 2 voies',s:'2 contacts (équivalents)'}; },
+  co:function(){ return {k:'co',n:'Capteur antivalent',s:'contact A / contact B inverse'}; }
+};
+var WX={
+ ai2u:[{k:'u',n:'Tension',ch:2,p:'Type de mesure : Tension, plage au choix.',rows:function(n){ return [R(1+n,'+',0,'s'),R(3+n,'−',0,'m')]; },dev:function(){ return [DV.u()]; }}],
+ ai8u:[{k:'u',n:'Tension',ch:8,p:'Type de mesure : Tension, plage au choix.',note:'Entrées asymétriques : toutes les voies ont la même référence MANA (bornes 9 à 16, reliées entre elles).',rows:function(n){ return [R(1+n,'+',0,'s'),R(9+n,'−',0,'m')]; },dev:function(){ return [DV.u()]; }}],
+ ai2i:[
+  {k:'i2',n:'4–20 mA, 2 fils',ch:2,p:'Type de mesure : Courant (transducteur 2 fils) 4..20 mA.',note:'Le module alimente la boucle par 1UVn. In− n\'est pas utilisée.',rows:function(n){ return [R(9+n,'+',0,'p'),R(5+n,'−',0,'s')]; },dev:function(){ return [DV.t2()]; }},
+  {k:'i4',n:'4–20 mA, 4 fils (alim. module)',ch:2,p:'Type de mesure : Courant (transducteur 4 fils) 4..20 mA.',rows:function(n){ return [R(13+n,'L+',0,'p'),R(15+n,'M',0,'m'),R(5+n,'Sig+',0,'s'),R(7+n,'Sig−',0,'s')]; },dev:function(){ return [DV.t4()]; }},
+  {k:'i4x',n:'4–20 mA, 4 fils (alim. externe)',ch:2,p:'Type de mesure : Courant (transducteur 4 fils) 4..20 mA.',rows:function(n){ return [R('L+ext','L+',0,'p'),R('Mext','M',0,'m'),R(5+n,'Sig+',0,'s'),R(7+n,'Sig−',0,'s')]; },dev:function(){ return [DV.t4()]; }}],
+ ai4i:[
+  {k:'i2',n:'4–20 mA, 2 fils',ch:4,p:'Type de mesure : Courant (transducteur 2 fils) 4..20 mA.',note:'2 fils : bornes UVn (9–12) et 2In+ (13–16).',rows:function(n){ return [R(9+n,'+',0,'p'),R(13+n,'−',0,'s')]; },dev:function(){ return [DV.t2()]; }},
+  {k:'i4x',n:'4–20 mA, 4 fils',ch:4,p:'Type de mesure : Courant (transducteur 4 fils) 4..20 mA.',note:'4 fils : bornes 1In+ (1–4) et 1In− (5–8), transmetteur alimenté par L+ / M.',rows:function(n){ return [R('L+ext','L+',0,'p'),R('Mext','M',0,'m'),R(1+n,'Sig+',0,'s'),R(5+n,'Sig−',0,'s')]; },dev:function(){ return [DV.t4()]; }}],
+ ai8i:[
+  {k:'i2',n:'4–20 mA, 2 fils',ch:8,p:'Type de mesure : Courant (transducteur 2 fils) 4..20 mA.',rows:function(n){ return [R(9+n,'+',0,'p'),R(1+n,'−',0,'s')]; },dev:function(){ return [DV.t2()]; }},
+  {k:'i4',n:'4–20 mA, 4 fils',ch:8,bu:'A0-D10',p:'Type de mesure : Courant (transducteur 4 fils) 4..20 mA.',note:'BaseUnit A0 avec bornes AUX (BU15-P16+A10+2D/2B, sélectionnée automatiquement) : ponter une borne AUX sur M pour que le bus AUX serve de masse commune. Entrées asymétriques, retour du signal sur M.',rows:function(n){ return [R(9+n,'L+',0,'p'),R('AUX','M',0,'m'),R('AUX','Sig−',0,'m'),R(1+n,'Sig+',0,'s')]; },dev:function(){ return [DV.t4()]; }}],
+ aihf:[
+  {k:'u2',n:'Tension, 2 fils',ch:2,p:'Type de mesure : Tension.',rows:function(n){ return [R(1+n,'+',0,'s'),R(3+n,'−',0,'m')]; },dev:function(){ return [DV.u()]; }},
+  {k:'u3',n:'Tension, 3 fils',ch:2,p:'Type de mesure : Tension.',note:'3 fils : la séparation galvanique est court-circuitée (courants de compensation possibles).',rows:function(n){ return [R(13+n,'L+',0,'p'),R(1+n,'Sig',0,'s'),R(3+n,'M',0,'m','m'),R(15+n,'M',0,'m','m')]; },dev:function(){ return [DV.t3()]; }},
+  {k:'u4',n:'Tension, 4 fils',ch:2,p:'Type de mesure : Tension.',rows:function(n){ return [R(13+n,'L+',0,'p'),R(15+n,'M',0,'m'),R(1+n,'Sig+',0,'s'),R(3+n,'Sig−',0,'s')]; },dev:function(){ return [DV.t4('0–10 V (actif)')]; }},
+  {k:'i2',n:'4–20 mA, 2 fils',ch:2,p:'Type de mesure : Courant (transducteur 2 fils) 4..20 mA.',rows:function(n){ return [R(9+n,'+',0,'p'),R(5+n,'−',0,'s')]; },dev:function(){ return [DV.t2()]; }},
+  {k:'i3',n:'4–20 mA, 3 fils',ch:2,p:'Type de mesure : Courant (transducteur 4 fils) 4..20 mA.',note:'3 fils : la séparation galvanique est court-circuitée. Ne jamais ponter directement In+ ou In− sur Mn.',rows:function(n){ return [R(13+n,'L+',0,'p'),R(5+n,'Sig',0,'s'),R(11+n,'M',0,'m','m'),R(15+n,'M',0,'m','m')]; },dev:function(){ return [DV.t3()]; }},
+  {k:'i4',n:'4–20 mA, 4 fils',ch:2,p:'Type de mesure : Courant (transducteur 4 fils) 4..20 mA.',rows:function(n){ return [R(13+n,'L+',0,'p'),R(15+n,'M',0,'m'),R(5+n,'Sig+',0,'s'),R(7+n,'Sig−',0,'s')]; },dev:function(){ return [DV.t4()]; }}],
+ aihs:[
+  {k:'u2',n:'Tension, 2 fils',ch:2,p:'Type de mesure : Tension.',rows:function(n){ return [R(1+n,'+',0,'s'),R(3+n,'−',0,'m')]; },dev:function(){ return [DV.u()]; }},
+  {k:'i2',n:'4–20 mA, 2 fils',ch:2,p:'Type de mesure : Courant (transducteur 2 fils) 4..20 mA.',rows:function(n){ return [R(9+n,'+',0,'p'),R(5+n,'−',0,'s')]; },dev:function(){ return [DV.t2()]; }},
+  {k:'i3',n:'4–20 mA, 3 fils',ch:2,p:'Type de mesure : Courant (transducteur 4 fils) 4..20 mA.',note:'3 fils : la séparation galvanique est court-circuitée. Ne jamais ponter directement In+ ou In− sur Mn.',rows:function(n){ return [R('L+ext','L+',0,'p'),R(5+n,'Sig',0,'s'),R(11+n,'M',0,'m','m'),R('Mext','M',0,'m','m')]; },dev:function(){ return [DV.t3()]; }},
+  {k:'i4',n:'4–20 mA, 4 fils',ch:2,p:'Type de mesure : Courant (transducteur 4 fils) 4..20 mA.',rows:function(n){ return [R('L+ext','L+',0,'p'),R('Mext','M',0,'m'),R(5+n,'Sig+',0,'s'),R(7+n,'Sig−',0,'s')]; },dev:function(){ return [DV.t4()]; }}],
+ ai4ui:[
+  {k:'u2',n:'Tension',ch:4,p:'Type de mesure : Tension.',rows:function(n){ return [R(1+n,'+',0,'s'),R(5+n,'−',0,'m')]; },dev:function(){ return [DV.u()]; }},
+  {k:'i2',n:'4–20 mA, 2 fils',ch:4,p:'Type de mesure : Courant (transducteur 2 fils) 4..20 mA.',note:'Module 2 fils : pas de transmetteur 4 fils en courant.',rows:function(n){ return [R(9+n,'+',0,'p'),R(13+n,'−',0,'s')]; },dev:function(){ return [DV.t2()]; }}],
+ ai4rtd:[
+  {k:'r2',n:'RTD 2 fils',ch:4,p:'Type de mesure : Thermomètre à résistance (RTD) 2 fils, saisir la résistance de ligne.',rows:function(n){ return [R(1+n,'1',0,'s'),R(5+n,'2',0,'s')]; },dev:function(){ return [DV.rtd(2)]; }},
+  {k:'r3',n:'RTD 3 fils',ch:4,p:'Type de mesure : Thermomètre à résistance (RTD) 3 fils.',note:'3 fils : même section et même longueur pour les 3 conducteurs (compensation automatique).',rows:function(n){ return [R(1+n,'1',0,'s','a'),R(9+n,'1',0,'s','a'),R(5+n,'2',0,'s')]; },dev:function(){ return [DV.rtd(3)]; }},
+  {k:'r4',n:'RTD 4 fils',ch:4,p:'Type de mesure : Thermomètre à résistance (RTD) 4 fils.',rows:function(n){ return [R(1+n,'1',0,'s','a'),R(9+n,'1',0,'s','a'),R(5+n,'2',0,'s','b'),R(13+n,'2',0,'s','b')]; },dev:function(){ return [DV.rtd(4)]; }},
+  {k:'tc',n:'Thermocouple',ch:4,p:'Type de mesure : Thermocouple, type + soudure froide (BaseUnit A1 = interne).',note:'Capteurs flottants : ponter les Mn− et les relier à la terre / FE (meilleure immunité).',rows:function(n){ return [R(1+n,'+',0,'s'),R(5+n,'−',0,'s')]; },dev:function(){ return [DV.tc()]; }}],
+ '2aiu':[{k:'u',n:'Tension',ch:2,p:'Type de mesure : Tension.',rows:function(n){ return [R(1+4*n,'+',0,'s'),R(2+4*n,'−',0,'m')]; },dev:function(){ return [DV.u()]; }}],
+ '2ai2w':[{k:'i2',n:'4–20 mA, 2 fils',ch:2,p:'Type de mesure : Courant 4..20 mA (transmetteur 2 fils).',note:'Le module alimente la boucle. Ne pas relier Mn− à Mana.',rows:function(n){ return [R(1+4*n,'+',0,'p'),R(2+4*n,'−',0,'s')]; },dev:function(){ return [DV.t2()]; }}],
+ '2ai4w':[{k:'i4',n:'4–20 mA, 4 fils',ch:2,p:'Type de mesure : Courant 4..20 mA (transmetteur 4 fils).',note:'Embase avec bornes 3 / 4 et 7 / 8 (TM-E15x26-A1 ou TM-E15x24-01).',rows:function(n){ return [R(3+4*n,'L+',0,'p'),R(4+4*n,'M',0,'m'),R(1+4*n,'Sig+',0,'s'),R(2+4*n,'Sig−',0,'s')]; },dev:function(){ return [DV.t4()]; }}],
+ fdi8:[
+  {k:'s1i',n:'1oo1, VS interne',ch:8,p:'Évaluation capteur : 1oo1. Alimentation capteur : VSn. Test de court-circuit : activé conseillé.',note:'SIL3 / Cat.3 / PLd avec un capteur qualifié. VS est pulsé par le module : le test de court-circuit détecte les courts-circuits avec L+ et entre voies.',rows:function(n){ return [R(9+n,'1',0,'p'),R(1+n,'2',0,'s')]; },dev:function(){ return [DV.sw('Contact de sécurité','1 voie')]; }},
+  {k:'s1x',n:'1oo1, alim. externe',ch:8,p:'Évaluation capteur : 1oo1. Alimentation capteur : externe. Test de court-circuit : désactivé.',note:'SIL3 / Cat.3 / PLd. Alimentation externe = pas de détection de court-circuit : poser le câble protégé contre les courts-circuits.',rows:function(n){ return [R('L+ext','1',0,'p'),R(1+n,'2',0,'s')]; },dev:function(){ return [DV.sw('Contact de sécurité','1 voie')]; }},
+  {k:'e2i',n:'1oo2 équivalent, VS interne',ch:4,p:'Évaluation capteur : 1oo2 équivalent (DIn + DIn+4). Alimentation : VSn et VSn+4. Test de court-circuit : activé → SIL3 / Cat.4 / PLe ; désactivé → Cat.3 / PLe.',note:'Une alimentation capteur différente par voie. Le signal process est lu sur DIn.',rows:function(n){ return [R(9+n,'A1',0,'p'),R(1+n,'A2',0,'s'),R(13+n,'B1',0,'p'),R(5+n,'B2',0,'s')]; },dev:function(){ return [DV.sw2()]; }},
+  {k:'e2x',n:'1oo2 équivalent, alim. externe',ch:4,p:'Évaluation capteur : 1oo2 équivalent. Alimentation capteur : externe. Test de court-circuit : désactivé.',note:'SIL3 / Cat.3 / PLe. Le signal process est lu sur DIn.',rows:function(n){ return [R('L+ext','A1',0,'p'),R('L+ext','B1',0,'p'),R(1+n,'A2',0,'s'),R(5+n,'B2',0,'s')]; },dev:function(){ return [DV.sw2()]; }},
+  {k:'n2i',n:'1oo2 antivalent, VS interne',ch:4,p:'Évaluation capteur : 1oo2 non équivalent. Alimentation capteur : VSn. Test de court-circuit au choix.',note:'SIL3 / Cat.4 / PLe. Un contact sur DIn, le contact inverse sur DIn+4.',rows:function(n){ return [R(9+n,'C',0,'p'),R(1+n,'A',0,'s'),R(5+n,'B',0,'s')]; },dev:function(){ return [DV.co()]; }},
+  {k:'n2x',n:'1oo2 antivalent, alim. externe',ch:4,p:'Évaluation capteur : 1oo2 non équivalent. Alimentation capteur : externe.',note:'SIL3 / Cat.4 / PLe. Un contact sur DIn, le contact inverse sur DIn+4.',rows:function(n){ return [R('L+ext','C',0,'p'),R(1+n,'A',0,'s'),R(5+n,'B',0,'s')]; },dev:function(){ return [DV.co()]; }}]
+};
+var EXTL={'L+ext':['+24 V','alim. externe'],'Mext':['0 V','alim. externe'],'AUX':['AUX','bornes 1A–10A = M']};
+function wxSVG(m,mode,n){
+  var rows=mode.rows(n), devs=mode.dev(n), H=40, top=14, W=600, x0=8, tw=176, xd=318, dw=274;
+  var h=top*2+rows.length*H, s='<svg class="wxs" viewBox="0 0 '+W+' '+h+'" role="img" aria-label="Schéma de câblage">';
+  var col={p:'#d22c2c',m:'#1f5fd1',s:'currentColor'};
+  rows.forEach(function(r,i){ var y=top+i*H+H/2, ext=typeof r.t==='string', lab, sub;
+    if(ext){ lab=EXTL[r.t][0]; sub=EXTL[r.t][1]; } else { var x=m.t[r.t]||['?','']; lab=x[0]; sub=x[1]; }
+    s+='<g class="wt'+(ext?' ext':'')+'"><rect x="'+x0+'" y="'+(y-15)+'" width="'+tw+'" height="30" rx="6"/>'+
+      (ext?'':'<circle cx="'+(x0+17)+'" cy="'+y+'" r="11"/><text class="n" x="'+(x0+17)+'" y="'+(y+4)+'">'+r.t+'</text>')+
+      '<text class="l" x="'+(x0+(ext?10:34))+'" y="'+(y-1)+'">'+esc(lab)+'</text><text class="d" x="'+(x0+(ext?10:34))+'" y="'+(y+11)+'">'+esc(sub)+'</text></g>';
+    s+='<line x1="'+(x0+tw)+'" y1="'+y+'" x2="'+xd+'" y2="'+y+'" stroke="'+col[r.c]+'" stroke-width="2.4"/>';
+  });
+  // ponts (même broche reliée à plusieurs bornes)
+  var seen={};
+  rows.forEach(function(r,i){ if(!r.j) return; var y=top+i*H+H/2; if(seen[r.j]!=null){ var y0=seen[r.j], xb=xd-14;
+      s+='<line x1="'+xb+'" y1="'+y0+'" x2="'+xb+'" y2="'+y+'" stroke="'+col[r.c]+'" stroke-width="2.4"/><circle cx="'+xb+'" cy="'+y0+'" r="3.6" fill="'+col[r.c]+'"/><circle cx="'+xb+'" cy="'+y+'" r="3.6" fill="'+col[r.c]+'"/>'; }
+    else seen[r.j]=y; });
+  // appareils
+  devs.forEach(function(d,k){ var idx=rows.map(function(r,i){ return r.d===k?i:-1; }).filter(function(i){ return i>=0; });
+    var y0=top+idx[0]*H+4, y1=top+idx[idx.length-1]*H+H-4, ym=(y0+y1)/2, shown={};
+    s+='<g class="wd"><rect x="'+xd+'" y="'+y0+'" width="'+dw+'" height="'+(y1-y0)+'" rx="8"/>';
+    idx.forEach(function(i){ var r=rows[i], y=top+i*H+H/2; if(r.j&&shown[r.j]) return; if(r.j) shown[r.j]=1; s+='<circle class="pin" cx="'+xd+'" cy="'+y+'" r="4"/><text class="p" x="'+(xd+10)+'" y="'+(y+4)+'">'+esc(r.pin)+'</text>'; });
+    var ix=xd+72, iy=ym;
+    s+=icon(d.k,ix,iy)+'<text class="dn" x="'+(ix+30)+'" y="'+(iy-2)+'">'+esc(d.n)+'</text><text class="ds" x="'+(ix+30)+'" y="'+(iy+13)+'">'+esc(d.s)+'</text></g>';
+  });
+  return s+'</svg>';
+}
+function icon(k,x,y){
+  var g='<g class="ic" transform="translate('+x+','+y+')">';
+  if(k==='vs') g+='<circle r="13"/><text class="it" y="4">V</text>';
+  else if(k==='tx') g+='<circle r="13"/><text class="it" y="4">mA</text>';
+  else if(k==='rtd') g+='<rect x="-6" y="-14" width="12" height="28" rx="2"/><path d="M-12 10 L12 -10 M7 -10 h5 v5"/>';
+  else if(k==='tc') g+='<path d="M-10 -12 L4 0 L-10 12"/><circle cx="4" cy="0" r="2.5" class="f"/>';
+  else if(k==='sw') g+='<path d="M0 -14 v6 M0 14 v-6 M0 8 L-8 -6"/>';
+  else if(k==='sw2') g+='<path d="M-7 -14 v6 M-7 14 v-6 M-7 8 L-14 -6 M7 -14 v6 M7 14 v-6 M7 8 L0 -6"/><path class="dash" d="M-11 1 H4"/>';
+  else if(k==='co') g+='<path d="M-8 14 v-6 M-8 8 L4 -4 M4 -14 v8 M-12 -14 v8 M-12 -6 h4"/>';
+  return g+'</g>';
+}
+
 /* =====================================================================
    état : une carte + une embase, affichage direct du bornier
    ===================================================================== */
-var st={sys:'sp',spm:'',spb:'',sm:'',stm:''};
+var st={sys:'sp',spm:'',spb:'',sm:'',stm:'',wx:'',wch:'0'};
 try{ var sv=JSON.parse(localStorage.getItem(KEY)||'null'); if(sv) for(var k in st) if(typeof sv[k]==='string') st[k]=sv[k]; }catch(e){}
 function persist(){ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
 
@@ -9147,10 +9296,10 @@ function kindOf(lbl){
   var s=String(lbl);
   if(/^(RES|n\.c\.|—)$/.test(s)) return 'res';
   if(/^AUX/.test(s)) return 'aux';
-  if(/^(M|Mana|2M\d)$/.test(s)) return 'gnd';
-  if(/^(24V|L\+\d*|UV\d|1UV\d|2UV\d|VS\d|24VDC)$/.test(s)) return 'pwr';
+  if(/^(M|Mana|[12]?M\d)$/.test(s)) return 'gnd';
+  if(/^(24V|L\+\d*|UV\d?|[12]UV\d|VS\d|24VDC)$/.test(s)) return 'pwr';
   if(/^(DQ|DO|Q\d|QV|QI|DQ-)/.test(s)) return 'out';
-  if(/^(U\d|I\d|M\d|IC\d|S\d)/.test(s)) return 'ana';
+  if(/^(U\d|I\d|M\d|IC\d|S\d|[12]I\d)/.test(s)) return 'ana';
   return 'in';
 }
 var CATL={'DI':'Entrées TOR','DQ':'Sorties TOR','DI/DQ':'Entrées / sorties TOR','AI':'Entrées analogiques','AQ':'Sorties analogiques','TM':'Modules technologiques','F':'Sécurité (F)'};
@@ -9177,9 +9326,11 @@ function renderSP(){
   var b=BU[st.spb];
   var h='<div class="whd"><h4>'+esc(m.n)+'</h4><span class="chip">'+m.ref+'</span><span class="sp"></span>'+(m.ok?'<span class="chip ok">tableau Siemens</span>':'<span class="chip warn" title="Brochage déduit des modules de la même famille, validé par FSI">déduit · validé</span>')+'</div>';
   h+='<div class="wbody"><div class="tb '+(b.light?'light':'dark')+'"><div class="tbcap"><span>'+esc(b.n)+'</span><span>'+(b.light?'claire':'foncée')+'</span></div><div class="tgrid">';
+  var wxs=WX[m.id]||null, wm=null, wn=0, used=null;
+  if(wxs){ wm=wxs.filter(function(x){ return x.k===st.wx; })[0]||wxs[0]; wn=Math.min(+st.wch||0,wm.ch-1); used={}; wm.rows(wn).forEach(function(r){ if(typeof r.t==='number') used[r.t]=1; }); }
   for(var r=0;r<8;r++){ [2*r+1,2*r+2].forEach(function(n){ var x=m.t[n]||['—',''], d=x[1];
     if(/^(24V|L\+\d)$/.test(x[0])) d=(d?d+' · ':'')+'= L+';
-    h+=tcell(n,x[0],d,'',m.pairs&&m.pairs[n]?m.pairs[n]:''); }); }
+    h+=tcell(n,x[0],d,used?(used[n]?' hl':' dim'):'',m.pairs&&m.pairs[n]?m.pairs[n]:''); }); }
   h+='</div>';
   if(b.aux){ h+='<div class="tsec"><div class="tbcap"><span>Bornes AUX</span><span>bus AUX</span></div><div class="tgrid">'; for(var a=1;a<=10;a++) h+=tcell(a+'A','AUX','PE, M ou 24 V au choix'); h+='</div></div>'; }
   if(b.add){ h+='<div class="tsec"><div class="tbcap"><span>Bornes additionnelles</span><span>non reliées au module</span></div><div class="tgrid">'; for(var c=1;c<=5;c++){ h+=tcell(c+'B','1B–5B','≤ 24 V DC / 10 A')+tcell(c+'C','1C–5C','≤ 24 V DC / 10 A'); } h+='</div></div>'; }
@@ -9189,8 +9340,18 @@ function renderSP(){
   h+='<div><ul class="wlist">'+m.w.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')+
     '<li>'+(b.light?'BaseUnit claire : nouveau groupe de potentiel, alimenter L+ / M ici.':'BaseUnit foncée : alimentée par le groupe de la BaseUnit claire à gauche.')+'</li>'+
     (b.temp?'<li>BaseUnit A1 : capteur de température intégré (soudure froide des thermocouples).</li>':'')+
-    '<li>Repère couleur : '+esc(m.cc)+'.</li></ul><p class="src">'+esc(m.src)+'</p></div></div>';
+    (m.cc&&m.cc!=='—'?'<li>Repère couleur : '+esc(m.cc)+'.</li>':'')+'</ul><p class="src">'+esc(m.src)+'</p></div></div>';
+  if(wm) h+=wxBlock(m,wxs,wm,wn);
   o.innerHTML=h; renderRefSP();
+}
+function wxBlock(m,wxs,wm,wn){
+  var isF=m.cat==='F', h='<div class="wx"><div class="whd"><h4>Exemple de câblage</h4><span class="sp"></span><span class="chip">'+(isF?'origine du potentiel capteur':'type de signal')+'</span></div>';
+  h+='<div class="wxsel"><div class="wchips" id="wxM">'+wxs.map(function(x){ return '<button type="button" data-wx="'+x.k+'" aria-pressed="'+(x===wm)+'">'+esc(x.n)+'</button>'; }).join('')+'</div>';
+  var lab=isF&&wm.ch===4?function(i){ return 'DI'+i+' + DI'+(i+4); }:function(i){ return (isF?'DI':'Voie ')+i; };
+  h+='<div class="wchips wch" id="wxC">'+Array.apply(null,{length:wm.ch}).map(function(_,i){ return '<button type="button" data-wch="'+i+'" aria-pressed="'+(i===wn)+'">'+lab(i)+'</button>'; }).join('')+'</div></div>';
+  h+='<div class="wxbody"><div class="wxpic">'+wxSVG(m,wm,wn)+'</div><div><div class="note" style="margin-top:0"><b>TIA Portal</b> — '+esc(wm.p)+'</div>'+(wm.note?'<p class="wxn">'+esc(wm.note)+'</p>':'')+
+    '<p class="wxn leg"><i style="background:#d22c2c"></i>alimentation +24 V <i style="background:#1f5fd1"></i>0 V / masse <i style="background:currentColor"></i>signal</p></div></div></div>';
+  return h;
 }
 function renderRefSP(){
   $('wRefT').textContent='Toutes les BaseUnits ET 200SP';
@@ -9215,13 +9376,16 @@ function renderS(){
   var h='<div class="whd"><h4>'+esc(m.n)+'</h4><span class="chip">'+m.ref+'</span><span class="sp"></span><span class="chip ok">tableau Siemens</span></div>';
   h+='<div class="wbody"><div class="tb '+(m.pm?'light':'dark')+'"><div class="tbcap"><span>'+esc(tm.n)+'</span><span>'+esc(tm.ref)+'</span></div><div class="tgrid">';
   var rows=m.pm?[['2','6'],['3','7'],['A4','A8']]:[['1','5'],['2','6'],['3','7'],['4','8'],['A4','A8'],['A3','A7']], miss=[];
+  var wxs=WX[m.id]||null, wm=null, wn=0, used=null;
+  if(wxs){ wm=wxs.filter(function(x){ return x.k===st.wx; })[0]||wxs[0]; wn=Math.min(+st.wch||0,wm.ch-1); used={}; wm.rows(wn).forEach(function(r){ if(typeof r.t==='number') used[r.t]=1; }); }
   rows.forEach(function(rw){ rw.forEach(function(k){ var has=tm.has.indexOf(k)>=0, x=m.t[k]||['—',''], d=x[1];
     if(!m.pm&&/^L\+$/.test(x[0])) d=(d?d+' · ':'')+'bus L+ du PM-E';
     if(!m.pm&&/^M$/.test(x[0])) d=(d?d+' · ':'')+'bus M du PM-E';
     if(!has&&!/^(n\.c\.|AUX1)$/.test(x[0])) miss.push(k+' ('+x[0]+')');
-    h+=tcell(k,x[0],has?d:'absente sur cette embase',has?'':' absent'); }); });
+    h+=tcell(k,x[0],has?d:'absente sur cette embase',(has?'':' absent')+(used?(used[k]?' hl':' dim'):'')); }); });
   h+='</div></div><div>'+(miss.length?'<div class="note warn" style="margin-top:0">Bornes absentes sur '+esc(tm.n)+' : '+esc(miss.join(', '))+'.</div>':'')+
     '<ul class="wlist">'+m.w.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')+'<li>Embase : '+esc(tm.d)+'.</li></ul><p class="src">'+esc(m.src)+'</p></div></div>';
+  if(wm) h+=wxBlock(m,wxs,wm,wn);
   o.innerHTML=h; renderRefS();
 }
 function renderRefS(){
@@ -9231,8 +9395,13 @@ function renderRefS(){
 }
 /* ---------------- actions ---------------- */
 $('wSys').addEventListener('click',function(e){ var b=e.target.closest('[data-v]'); if(!b) return; st.sys=b.getAttribute('data-v'); persist(); render(); });
-$('wMods').addEventListener('click',function(e){ var b=e.target.closest('[data-m]'); if(!b) return; if(st.sys==='sp') st.spm=b.getAttribute('data-m'); else st.sm=b.getAttribute('data-m'); persist(); render();
+$('wMods').addEventListener('click',function(e){ var b=e.target.closest('[data-m]'); if(!b) return; var nm=b.getAttribute('data-m'); if((st.sys==='sp'?st.spm:st.sm)!==nm){ st.wx=''; st.wch='0'; } if(st.sys==='sp') st.spm=nm; else st.sm=b.getAttribute('data-m'); persist(); render();
   if(window.innerWidth<=1100){ var o=$('wBus'); if(o.scrollIntoView) o.scrollIntoView({behavior:'smooth',block:'start'}); } });
+$('wOut').addEventListener('click',function(e){ var b=e.target.closest('[data-wx],[data-wch]'); if(!b) return;
+  if(b.hasAttribute('data-wx')){ st.wx=b.getAttribute('data-wx');
+    var mm=st.sys==='sp'?SPBY[st.spm]:null, md=mm&&(WX[mm.id]||[]).filter(function(x){ return x.k===st.wx; })[0];
+    if(md&&md.bu&&!BU[st.spb].aux) st.spb=md.bu; }
+  else st.wch=b.getAttribute('data-wch'); persist(); render(); });
 $('wBus').addEventListener('click',function(e){ var b=e.target.closest('[data-b]'); if(!b||b.disabled) return; if(st.sys==='sp') st.spb=b.getAttribute('data-b'); else st.stm=b.getAttribute('data-b'); persist(); render(); });
 render();
 })();
