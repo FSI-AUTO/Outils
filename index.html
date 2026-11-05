@@ -9181,10 +9181,10 @@ function renderSP(){
     if(/^(24V|L\+\d)$/.test(x[0])) d=(d?d+' · ':'')+'= L+';
     h+=tcell(n,x[0],d,'',m.pairs&&m.pairs[n]?m.pairs[n]:''); }); }
   h+='</div>';
-  if(b.light) h+='<div class="tgrid tpow">'+tcell('L+','L+','24 V DC, alimentation du groupe')+tcell('M','M','masse du groupe')+'</div>';
-  else h+='<div class="tnone">Pas de bornes L+ / M : potentiel repris de la BaseUnit de gauche (bus P1 / P2).</div>';
   if(b.aux){ h+='<div class="tsec"><div class="tbcap"><span>Bornes AUX</span><span>bus AUX</span></div><div class="tgrid">'; for(var a=1;a<=10;a++) h+=tcell(a+'A','AUX','PE, M ou 24 V au choix'); h+='</div></div>'; }
   if(b.add){ h+='<div class="tsec"><div class="tbcap"><span>Bornes additionnelles</span><span>non reliées au module</span></div><div class="tgrid">'; for(var c=1;c<=5;c++){ h+=tcell(c+'B','1B–5B','≤ 24 V DC / 10 A')+tcell(c+'C','1C–5C','≤ 24 V DC / 10 A'); } h+='</div></div>'; }
+  if(b.light) h+='<div class="tgrid tpow">'+tcell('L+','L+','24 V DC, alimentation du groupe')+tcell('M','M','masse du groupe')+'</div>';
+  else h+='<div class="tnone">Pas de bornes L+ / M : potentiel repris de la BaseUnit de gauche (bus P1 / P2).</div>';
   h+='<div class="pbus"><div class="p1">P1 = L+</div><div class="p2">P2 = M</div><div class="ax">AUX'+(b.aux?'':' (non accessible)')+'</div></div></div>';
   h+='<div><ul class="wlist">'+m.w.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')+
     '<li>'+(b.light?'BaseUnit claire : nouveau groupe de potentiel, alimenter L+ / M ici.':'BaseUnit foncée : alimentée par le groupe de la BaseUnit claire à gauche.')+'</li>'+

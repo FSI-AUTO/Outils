@@ -11,4 +11,4 @@ manifest.webmanifest et icons/ (icône d'écran d'accueil).
 Mise à jour : remplacer les fichiers sur l'hébergement. L'appli prend la nouvelle
 version à la prochaine ouverture avec du réseau.
 
-Version : e519a3ef46
+Version : eff1c6c014
