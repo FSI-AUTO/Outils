@@ -1525,6 +1525,33 @@ html.full main.mods{flex:1;min-height:0}
 #m-brake .bok{color:var(--ok);font-weight:700}
 #m-brake .bno{color:var(--warn);font-weight:700}
 /* ===== Câblage ET 200 ===== */
+#m-wire .wq{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:var(--gap);align-items:start}
+@media (max-width:1100px){
+  #m-wire .wq{grid-template-columns:minmax(0,1fr)}
+}
+#m-wire .wgrp{margin-bottom:12px}
+#m-wire .wgrp:last-child{margin-bottom:0}
+#m-wire .wgrp>b{display:block;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+#m-wire .wchips{display:flex;flex-wrap:wrap;gap:6px}
+#m-wire .wchips button{border:1px solid var(--line);background:var(--raise);border-radius:7px;padding:7px 10px;cursor:pointer;font:inherit;font-size:14px;font-weight:600;color:inherit}
+#m-wire .wchips button small{font-weight:500;font-size:11px;color:var(--warn)}
+#m-wire .wchips button:hover{border-color:var(--sky)}
+#m-wire .wchips button[aria-pressed="true"]{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+#m-wire .wchips button[aria-pressed="true"] small{color:inherit;opacity:.8}
+#m-wire .wbus{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+@media (max-width:600px){
+  #m-wire .wbus{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+#m-wire .wbus button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1px solid var(--line);border-radius:7px;padding:7px 10px;cursor:pointer;font:inherit;color:inherit;min-width:0}
+#m-wire .wbus button span{font-weight:700;font-size:14px}
+#m-wire .wbus button small{font-family:var(--f-mono);font-size:11px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#m-wire .wbus button.lt{background:#f6f7f4;color:#1b2b3c}
+#m-wire .wbus button.dk{background:#3b4652;color:#f3f6f9}
+#m-wire .wbus button[aria-pressed="true"]{outline:3px solid var(--sky);outline-offset:1px}
+#m-wire .wbus button:disabled{opacity:.3;cursor:not-allowed}
+#m-wire .tpow{margin-top:5px}
+#m-wire .tnone{margin-top:6px;font-size:12px;color:var(--muted);border:1px dashed var(--line);border-radius:6px;padding:6px 8px;text-align:center}
+#m-wire .tt i.pair{font-style:normal;font-family:var(--f-ui);font-size:10.5px;font-weight:700;background:var(--sky-soft);color:var(--sky-ink);border-radius:99px;padding:1px 6px;margin-left:3px}
 #m-wire .wtop{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 #m-wire .wtop .seg{flex:0 1 360px}
 #m-wire .wtop .sp{flex:1}
@@ -3100,33 +3127,23 @@ Relais (essai d'Åström) :
 <div class="kwrap">
   <div class="wtop">
     <div class="seg" role="group" aria-label="Système" id="wSys"><button type="button" data-v="sp">ET 200SP</button><button type="button" data-v="s">ET 200S</button></div>
-    <span class="sp"></span>
-    <button type="button" class="btn sm" id="wPrint">Imprimer</button>
-    <button type="button" class="btn sm" id="wClear">Vider la station</button>
   </div>
-  <div class="board">
-    <div class="col">
-      <div class="card">
-        <section>
-          <h3>Station <span class="chip" id="wN">0</span></h3>
-          <div class="wslots" id="wSlots"></div>
-          <div class="wadd"><select class="in" id="wAddSel" aria-label="Module à ajouter"></select><button type="button" class="btn" id="wAdd">+ Ajouter</button></div>
-          <p class="hint" id="wHint"></p>
-        </section>
-      </div>
+  <div class="wq">
+    <div class="card">
+      <section>
+        <h3>Carte</h3>
+        <div id="wMods"></div>
+      </section>
     </div>
-    <div class="col">
-      <div class="card">
-        <section>
-          <h3>Vue de la station</h3>
-          <div class="rail" id="wRail"></div>
-          <div class="rleg" id="wLeg"></div>
-          <div id="wWarn"></div>
-        </section>
-      </div>
+    <div class="card">
+      <section>
+        <h3 id="wBuT">BaseUnit</h3>
+        <div class="wbus" id="wBus"></div>
+        <p class="hint" id="wBuH"></p>
+      </section>
+      <section id="wOut"></section>
     </div>
   </div>
-  <div class="wcards" id="wCards"></div>
   <div class="card">
     <section>
       <h3 id="wRefT">Embases</h3>
@@ -8952,7 +8969,7 @@ MODS["wire"]=function(document){
 (function(){
 'use strict';
 var $=function(id){ return document.getElementById(id); };
-var KEY='fsi-cablage-et200-v1';
+var KEY='fsi-cablage-et200-v2';
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 
 /* =====================================================================
@@ -9056,9 +9073,9 @@ var SP=[
  {id:'tmpos',cat:'TM',n:'TM PosInput 1',ref:'6ES7138-6BA00-0BA0',bu:['A0'],cc:'—',
   t:T([[1,'A','A / SSI DAT'],[2,'DI0','entrée TOR 0'],[3,'/A','/A / SSI /DAT'],[4,'DI1','entrée TOR 1'],[5,'B','B / SSI CLK'],[6,'—','non affectée'],[7,'/B','/B / SSI /CLK'],[8,'DQ0','sortie TOR 0'],[9,'N','top zéro'],[10,'DQ1','sortie TOR 1'],[11,'/N','/N'],[12,'—','non affectée'],[13,'—','non affectée'],[14,'M','masse'],[15,'24VDC','alim. codeur 24 V (300 mA)'],[16,'M','masse']]),ok:1,
   src:SRC_T+' (02/2014, A5E33015755-AA).',w:['RS422 / SSI : paires A–/A, B–/B, N–/N.','Blindage relié à la borne de blindage de la BaseUnit et côté codeur.']},
- {id:'fdi8',cat:'F',n:'F-DI 8x24VDC HF',ref:'6ES7136-6BA00-0CA0',bu:['A0'],cc:'CC01',
+ {id:'fdi8',cat:'F',n:'F-DI 8x24VDC HF',ref:'6ES7136-6BA00-0CA0',bu:['A0'],cc:'CC01',pairs:{1:'1oo2 ↔ DI4',2:'1oo2 ↔ DI5',3:'1oo2 ↔ DI6',4:'1oo2 ↔ DI7',5:'1oo2 ↔ DI0',6:'1oo2 ↔ DI1',7:'1oo2 ↔ DI2',8:'1oo2 ↔ DI3'},
   t:T(seq(1,'DI#',0,8,'entrée de sécurité voie #').concat(seq(9,'VS#',0,8,'alim. capteur interne #'))),ok:1,
-  src:SRC_T+' (07/2013, A5E03858068-01).',w:['Chaque entrée peut être affectée à n\'importe quelle alimentation VSn (paramètre).','1oo2 : paires DI0/DI4, DI1/DI5, DI2/DI6, DI3/DI7.']},
+  src:SRC_T+' (07/2013, A5E03858068-01).',w:['Voies couplables en 1oo2 (évaluation 2 voies) dans la configuration matérielle : DI0 avec DI4, DI1 avec DI5, DI2 avec DI6, DI3 avec DI7. Le signal est alors fourni sur DI0 à DI3.','Chaque entrée peut être affectée à n\'importe quelle alimentation VSn (paramètre).']},
  {id:'fdq4',cat:'F',n:'F-DQ 4x24VDC/2A PM HF',ref:'6ES7136-6DB01-0CA0',bu:['A0'],noA1:1,cc:'CC02',
   t:T([[1,'DQ-P0','commutation P voie 0'],[2,'DQ-P1','commutation P voie 1'],[3,'DQ-P2','commutation P voie 2'],[4,'DQ-P3','commutation P voie 3'],[5,'DQ-P0','(2e borne)'],[6,'DQ-P1','(2e borne)'],[7,'DQ-P2','(2e borne)'],[8,'DQ-P3','(2e borne)'],[9,'DQ-M0','commutation M voie 0'],[10,'DQ-M1','commutation M voie 1'],[11,'DQ-M2','commutation M voie 2'],[12,'DQ-M3','commutation M voie 3'],[13,'DQ-M0','(2e borne)'],[14,'DQ-M1','(2e borne)'],[15,'DQ-M2','(2e borne)'],[16,'DQ-M3','(2e borne)']]),ok:1,
   src:SRC_T+' (03/2025, A5E03858037-AC).',w:['Charge entre DQ-Pn et DQ-Mn (commutation PM).','Séparer les câbles P et M pour éviter un court-circuit transversal.','Ne pas utiliser de BaseUnit A1.']}
@@ -9120,13 +9137,11 @@ var S=[
 var SBY={}; S.forEach(function(m){ SBY[m.id]=m; });
 
 /* =====================================================================
-   état
+   état : une carte + une embase, affichage direct du bornier
    ===================================================================== */
-var st={sys:'sp',sp:[],s:[],cur:-1};
-try{ var sv=JSON.parse(localStorage.getItem(KEY)||'null'); if(sv){ if(sv.sys) st.sys=sv.sys; if(Array.isArray(sv.sp)) st.sp=sv.sp; if(Array.isArray(sv.s)) st.s=sv.s; } }catch(e){}
-function persist(){ try{ localStorage.setItem(KEY,JSON.stringify({sys:st.sys,sp:st.sp,s:st.s})); }catch(e){} }
-function L(){ return st.sys==='sp'?st.sp:st.s; }
-var GCOL=['#d22c2c','#1f9d55','#e07b00','#7b3fa0','#1f6fd1','#c2187a','#0f8a8a','#8a6d00'];
+var st={sys:'sp',spm:'',spb:'',sm:'',stm:''};
+try{ var sv=JSON.parse(localStorage.getItem(KEY)||'null'); if(sv) for(var k in st) if(typeof sv[k]==='string') st[k]=sv[k]; }catch(e){}
+function persist(){ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
 
 function kindOf(lbl){
   var s=String(lbl);
@@ -9138,134 +9153,87 @@ function kindOf(lbl){
   if(/^(U\d|I\d|M\d|IC\d|S\d)/.test(s)) return 'ana';
   return 'in';
 }
-/* ---------- calcul des groupes de potentiel ---------- */
-function groupsSP(list){
-  var g=0, aux=0, out=[], warn=[];
-  list.forEach(function(sl,i){
-    var b=BU[sl.bu]||BU['A0-B'], m=SPBY[sl.m];
-    if(b.light){ g++; aux++; }
-    else if(i===0){ g=1; aux=1; warn.push('L\'emplacement 1 doit avoir une BaseUnit <b>claire</b> : c\'est elle qui alimente le premier groupe de potentiel.'); }
-    if(m&&m.bu.indexOf(b.ty)<0) warn.push('Emplacement '+(i+1)+' : le '+esc(m.n)+' n\'accepte pas une BaseUnit '+b.ty+' (types autorisés : '+m.bu.join(', ')+').');
-    if(m&&m.noA1&&b.ty==='A1') warn.push('Emplacement '+(i+1)+' : pas de BaseUnit A1 avec le '+esc(m.n)+' (son fusible interne peut déclencher).');
-    out.push({g:g,aux:aux,b:b,m:m,feed:b.light?i:-1});
-  });
-  var first={}; out.forEach(function(o,i){ if(first[o.g]==null) first[o.g]=i; o.src=first[o.g]; });
-  return {slots:out,warn:warn,n:g};
-}
-function groupsS(list){
-  var g=0, aux=0, pmAt=-1, out=[], warn=[];
-  list.forEach(function(sl,i){
-    var m=SBY[sl.m], o={m:m};
-    if(m&&m.pm){ g++; pmAt=i; var tp=TMP[sl.tm]||TMP['P-A1']; if(tp.aux==='new'||aux===0) aux++; o.tm=tp; }
-    else { if(g===0){ warn.push('Le premier module doit être un module de puissance PM-E : sans lui, les modules électroniques ne sont pas alimentés.'); g=1; aux=Math.max(aux,1); }
-      var te=TME[sl.tm]||TME[m?m.tm[0]:'E26A1']; o.tm=te;
-      if(m&&m.tm.indexOf(sl.tm)<0) warn.push('Emplacement '+(i+1)+' : l\'embase '+te.n+' n\'est pas prévue pour le '+esc(m.n)+'.');
-      if(m) Object.keys(m.t).forEach(function(k){ var lb=m.t[k][0]; if(/^(n\.c\.|AUX1)$/.test(lb)) return; if(te.has.indexOf(k)<0&&!/selon embase/.test(m.t[k][1])) warn.push('Emplacement '+(i+1)+' : borne '+k+' ('+lb+') absente sur '+te.n+'.'); });
-    }
-    o.g=g; o.aux=aux; o.pm=pmAt; out.push(o);
-  });
-  return {slots:out,warn:warn,n:g};
-}
-
-/* ---------- rendu ---------- */
-function optsSP(){ var cats={}; SP.forEach(function(m){ (cats[m.cat]=cats[m.cat]||[]).push(m); });
-  var lab={'DI':'Entrées TOR','DQ':'Sorties TOR','DI/DQ':'Entrées / sorties TOR','AI':'Entrées analogiques','AQ':'Sorties analogiques','TM':'Modules technologiques','F':'Sécurité (F)'};
-  return Object.keys(lab).filter(function(c){ return cats[c]; }).map(function(c){ return '<optgroup label="'+lab[c]+'">'+cats[c].map(function(m){ return '<option value="'+m.id+'">'+esc(m.n)+(m.ok?'':' (à vérifier)')+'</option>'; }).join('')+'</optgroup>'; }).join(''); }
-function optsS(){ return '<optgroup label="Module de puissance">'+S.filter(function(m){ return m.pm; }).map(function(m){ return '<option value="'+m.id+'">'+esc(m.n)+'</option>'; }).join('')+'</optgroup><optgroup label="Modules électroniques">'+S.filter(function(m){ return !m.pm; }).map(function(m){ return '<option value="'+m.id+'">'+esc(m.n)+'</option>'; }).join('')+'</optgroup>'; }
+var CATL={'DI':'Entrées TOR','DQ':'Sorties TOR','DI/DQ':'Entrées / sorties TOR','AI':'Entrées analogiques','AQ':'Sorties analogiques','TM':'Modules technologiques','F':'Sécurité (F)'};
+var BUL={'A0-D':['A0','claire'],'A0-D10':['A0','claire + AUX'],'A0-B':['A0','foncée'],'A0-B10':['A0','foncée + AUX'],'A1-D':['A1','claire'],'A1-D12':['A1','claire + bornes add.'],'A1-B':['A1','foncée'],'A1-B12':['A1','foncée + bornes add.']};
+function tcell(num,lab,desc,extra,badge){ var k=kindOf(lab); return '<div class="tt k-'+k+(extra||'')+'" title="'+esc(num+' : '+lab+(desc?' — '+desc:''))+'"><b>'+esc(num)+'</b><div><span>'+esc(lab)+(badge?' <i class="pair">'+esc(badge)+'</i>':'')+'</span>'+(desc?'<small>'+esc(desc)+'</small>':'')+'</div></div>'; }
 
 function render(){
   $('wSys').querySelectorAll('[data-v]').forEach(function(b){ b.setAttribute('aria-pressed',String(b.getAttribute('data-v')===st.sys)); });
-  var sp=st.sys==='sp', list=L(), G=sp?groupsSP(list):groupsS(list);
-  $('wAddSel').innerHTML=sp?optsSP():optsS();
-  $('wN').textContent=list.length;
-  $('wHint').innerHTML=sp?'Chaque module se pose sur une BaseUnit. Une BaseUnit <b>claire</b> ouvre un nouveau groupe de potentiel (alimentation L+ / M) ; une <b>foncée</b> prolonge le groupe de gauche. Terminer la station par un module serveur.'
-    :'Un module de puissance PM-E ouvre un groupe de potentiel ; les modules électroniques à sa droite sont alimentés par ses bus L+ / M. Choisissez l\'embase (module de raccordement TM) de chaque module.';
-  /* liste des emplacements */
-  $('wSlots').innerHTML=list.length?list.map(function(sl,i){ var o=G.slots[i], col=GCOL[(o.g-1)%GCOL.length];
-    var sel;
-    if(sp){ var m=SPBY[sl.m]; sel='<select class="in" data-i="'+i+'" data-f="m">'+optsSP()+'</select><select class="in" data-i="'+i+'" data-f="bu">'+BUORD.map(function(k){ var b=BU[k]; var okT=!m||m.bu.indexOf(b.ty)>=0; return '<option value="'+k+'"'+(okT?'':' disabled')+'>'+(b.light?'Claire':'Foncée')+' · '+b.n+'</option>'; }).join('')+'</select>'; }
-    else { var m2=SBY[sl.m], tl=m2&&m2.pm?TMPORD:TMEORD; sel='<select class="in" data-i="'+i+'" data-f="m">'+optsS()+'</select><select class="in" data-i="'+i+'" data-f="tm">'+tl.map(function(k){ var t=(m2&&m2.pm?TMP:TME)[k]; var okT=!m2||m2.pm||m2.tm.indexOf(k)>=0; return '<option value="'+k+'"'+(okT?'':' disabled')+'>'+t.n+'</option>'; }).join('')+'</select>'; }
-    return '<div class="wslot'+(i===st.cur?' cur':'')+'" data-slot="'+i+'"><span class="no" style="background:'+col+'22;border:2px solid '+col+'">'+(i+1)+'</span><div class="sels">'+sel+'</div><div class="act"><button type="button" data-a="up" data-i="'+i+'" aria-label="Monter" title="Monter">↑</button><button type="button" data-a="dn" data-i="'+i+'" aria-label="Descendre" title="Descendre">↓</button><button type="button" data-a="del" data-i="'+i+'" aria-label="Retirer" title="Retirer">✕</button></div></div>'; }).join('')
-    :'<div class="wempty">Station vide. Choisissez un module ci-dessous et cliquez <b>+ Ajouter</b>.</div>';
-  list.forEach(function(sl,i){ $('wSlots').querySelectorAll('select[data-i="'+i+'"]').forEach(function(s){ var f=s.getAttribute('data-f'); s.value=sl[f]; }); });
-  /* rail */
-  $('wRail').innerHTML=list.map(function(sl,i){ var o=G.slots[i], col=GCOL[(o.g-1)%GCOL.length];
-    if(sp){ var b=o.b; return '<div class="rmod'+(i===st.cur?' cur':'')+'" data-slot="'+i+'" title="'+esc((o.m?o.m.n:'')+' · '+b.n)+'"><div class="rg" style="background:'+col+'"></div><div class="rn">'+(i+1)+'</div><div class="rt">'+esc(o.m?o.m.n.replace(/x24VDC|24VDC/,''):'?')+'</div><div class="rb '+(b.light?'light':'dark')+'">'+b.ty+' '+(b.light?'claire':'foncée')+(b.aux?' · AUX':'')+'</div></div>'; }
-    return '<div class="rmod'+(o.m&&o.m.pm?' pm':'')+(i===st.cur?' cur':'')+'" data-slot="'+i+'"><div class="rg" style="background:'+col+'"></div><div class="rn">'+(i+1)+'</div><div class="rt">'+esc(o.m?o.m.n:'?')+'</div><div class="rb '+(o.m&&o.m.pm?'light':'dark')+'">'+esc(o.tm?o.tm.n.replace('TM-',''):'')+'</div></div>'; }).join('')+(sp&&list.length?'<div class="rmod" style="width:46px;cursor:default"><div class="rg" style="background:var(--line)"></div><div class="rn">SM</div><div class="rt">module serveur</div></div>':'');
-  var leg=[]; for(var g=1;g<=G.n;g++){ var at=G.slots.map(function(o,i){ return o.g===g?i+1:null; }).filter(Boolean); if(at.length) leg.push('<span><i style="background:'+GCOL[(g-1)%GCOL.length]+'"></i>Groupe '+g+' : empl. '+at[0]+(at.length>1?' à '+at[at.length-1]:'')+'</span>'); }
-  $('wLeg').innerHTML=leg.join('');
-  $('wWarn').innerHTML=G.warn.map(function(w){ return '<div class="note warn">'+w+'</div>'; }).join('')+(list.length&&!G.warn.length?'<div class="note ok">Station cohérente : '+G.n+' groupe'+(G.n>1?'s':'')+' de potentiel.</div>':'');
-  /* fiches */
-  $('wCards').innerHTML=list.map(function(sl,i){ return sp?cardSP(sl,i,G.slots[i]):cardS(sl,i,G.slots[i],G.slots); }).join('');
-  /* référence */
-  if(sp){ $('wRefT').textContent='BaseUnits ET 200SP';
-    $('wRef').innerHTML='<thead><tr><th>Type</th><th>Référence</th><th>Désignation</th><th>Teinte</th><th>Bornes</th><th>Bornes supplémentaires</th><th>Pour</th></tr></thead><tbody>'+BUREF.map(function(r){ return '<tr><td><b>'+r[0]+'</b></td><td class="m">'+r[1]+'</td><td class="m">'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td>'+r[5]+'</td><td>'+r[6]+'</td></tr>'; }).join('')+'</tbody>';
-    $('wRefS').innerHTML='Claire (D) = ouvre un groupe de potentiel, P1 / P2 et AUX interrompus vers la gauche, alimentation L+ / M (10 A max. par groupe). Foncée (B) = prolonge P1 / P2 / AUX du voisin de gauche. Références : emballage unitaire (…-0…). Source : manuel Siemens « ET 200SP BaseUnits », éd. 06/2025 (A5E03727049-AN).';
-  } else { $('wRefT').textContent='Embases ET 200S (modules de raccordement)';
-    $('wRef').innerHTML='<thead><tr><th>Désignation</th><th>Référence (vis)</th><th>Pour</th><th>Bornes / AUX1</th></tr></thead><tbody>'+TMPORD.map(function(k){ var t=TMP[k]; return '<tr><td class="m">'+t.n+'</td><td class="m">'+t.ref+'</td><td>Module de puissance</td><td>'+esc(t.d)+'</td></tr>'; }).join('')+TMEORD.map(function(k){ var t=TME[k]; return '<tr><td class="m">'+t.n+'</td><td class="m">'+t.ref+'</td><td>Module électronique 15 mm</td><td>'+esc(t.d)+'</td></tr>'; }).join('')+'</tbody>';
-    $('wRefS').innerHTML='Existe aussi en ressort (C) et Fast Connect (N), même brochage. Disposition des bornes représentée en 2 colonnes (1–4 | 5–8, puis A4 | A8 et A3 | A7). Références des TM-P : x selon le raccordement (vis, ressort, Fast Connect). Source : manuel Siemens « ET 200S Terminal modules » (ID 25390457).';
-  }
+  if(st.sys==='sp') renderSP(); else renderS();
 }
-function tcell(num,lab,desc,extra){ var k=kindOf(lab); return '<div class="tt k-'+k+(extra||'')+'" title="'+esc(num+' : '+lab+(desc?' — '+desc:''))+'"><b>'+esc(num)+'</b><div><span>'+esc(lab)+'</span>'+(desc?'<small>'+esc(desc)+'</small>':'')+'</div></div>'; }
-function cardSP(sl,i,o){
-  var m=o.m, b=o.b, col=GCOL[(o.g-1)%GCOL.length];
-  if(!m) return '';
-  var h='<div class="card"><section><div class="whd"><span class="gchip" style="background:'+col+'">Groupe '+o.g+'</span><h4>'+(i+1)+' · '+esc(m.n)+'</h4><span class="chip">'+m.ref+'</span><span class="sp"></span>'+(m.ok?'<span class="chip ok">tableau Siemens</span>':'<span class="chip warn">déduit · à vérifier</span>')+'</div>';
-  h+='<div class="wbody"><div class="tb '+(b.light?'light':'dark')+'"><div class="tbcap"><span>'+esc(b.n)+'</span><span>'+(b.light?'claire':'foncée')+'</span></div>';
-  if(b.light) h+='<div class="tgrid" style="margin-bottom:8px">'+tcell('L+','L+','24 V DC → alimente le groupe '+o.g)+tcell('M','M','masse du groupe '+o.g)+'</div>';
-  h+='<div class="tgrid">';
-  for(var r=0;r<8;r++){ [2*r+1,2*r+2].forEach(function(n){ var x=m.t[n]||['—','']; var d=x[1]; if(/^(24V|L\+\d)$/.test(x[0])) d=(d?d+' · ':'')+'= L+ groupe '+o.g; if(x[0]==='M') d=(d?d+' · ':'')+'groupe '+o.g; h+=tcell(n,x[0],d); }); }
+/* ---------------- ET 200SP ---------------- */
+function renderSP(){
+  var m=SPBY[st.spm]||null;
+  var cats={}; SP.forEach(function(x){ (cats[x.cat]=cats[x.cat]||[]).push(x); });
+  $('wMods').innerHTML=Object.keys(CATL).filter(function(c){ return cats[c]; }).map(function(c){ return '<div class="wgrp"><b>'+CATL[c]+'</b><div class="wchips">'+cats[c].map(function(x){ return '<button type="button" data-m="'+x.id+'" aria-pressed="'+(x.id===st.spm)+'">'+esc(x.n)+''+'</button>'; }).join('')+'</div></div>'; }).join('');
+  $('wBuT').textContent='BaseUnit';
+  if(m&&(!BU[st.spb]||m.bu.indexOf(BU[st.spb].ty)<0)) st.spb=m.bu[0]+'-D';
+  if(!m&&!BU[st.spb]) st.spb='A0-D';
+  $('wBus').innerHTML=BUORD.map(function(k){ var b=BU[k], ok=!m||m.bu.indexOf(b.ty)>=0, bad=m&&m.noA1&&b.ty==='A1';
+    return '<button type="button" class="'+(b.light?'lt':'dk')+'" data-b="'+k+'" aria-pressed="'+(k===st.spb)+'"'+(ok&&!bad?'':' disabled')+'><span>'+BUL[k][0]+' '+BUL[k][1]+'</span><small>'+b.n+'</small></button>'; }).join('');
+  $('wBuH').innerHTML='<b>Claire</b> : ouvre un nouveau groupe de potentiel, alimenté par ses bornes L+ / M (10 A max. par groupe). <b>Foncée</b> : prolonge le groupe de la BaseUnit de gauche. '+(m?'Types autorisés pour cette carte : <b>'+m.bu.join(', ')+'</b>.':'');
+  var o=$('wOut');
+  if(!m){ o.innerHTML='<div class="wempty">Choisissez une carte : son bornier s\'affiche ici.</div>'; renderRefSP(); return; }
+  var b=BU[st.spb];
+  var h='<div class="whd"><h4>'+esc(m.n)+'</h4><span class="chip">'+m.ref+'</span><span class="sp"></span>'+(m.ok?'<span class="chip ok">tableau Siemens</span>':'<span class="chip warn" title="Brochage déduit des modules de la même famille, validé par FSI">déduit · validé</span>')+'</div>';
+  h+='<div class="wbody"><div class="tb '+(b.light?'light':'dark')+'"><div class="tbcap"><span>'+esc(b.n)+'</span><span>'+(b.light?'claire':'foncée')+'</span></div><div class="tgrid">';
+  for(var r=0;r<8;r++){ [2*r+1,2*r+2].forEach(function(n){ var x=m.t[n]||['—',''], d=x[1];
+    if(/^(24V|L\+\d)$/.test(x[0])) d=(d?d+' · ':'')+'= L+';
+    h+=tcell(n,x[0],d,'',m.pairs&&m.pairs[n]?m.pairs[n]:''); }); }
   h+='</div>';
-  if(b.aux){ h+='<div class="tsec"><div class="tbcap"><span>Bornes AUX</span><span>bus AUX '+o.aux+'</span></div><div class="tgrid">'; for(var a=1;a<=10;a++) h+=tcell(a+'A','AUX','PE, M ou 24 V au choix'); h+='</div></div>'; }
+  if(b.light) h+='<div class="tgrid tpow">'+tcell('L+','L+','24 V DC, alimentation du groupe')+tcell('M','M','masse du groupe')+'</div>';
+  else h+='<div class="tnone">Pas de bornes L+ / M : potentiel repris de la BaseUnit de gauche (bus P1 / P2).</div>';
+  if(b.aux){ h+='<div class="tsec"><div class="tbcap"><span>Bornes AUX</span><span>bus AUX</span></div><div class="tgrid">'; for(var a=1;a<=10;a++) h+=tcell(a+'A','AUX','PE, M ou 24 V au choix'); h+='</div></div>'; }
   if(b.add){ h+='<div class="tsec"><div class="tbcap"><span>Bornes additionnelles</span><span>non reliées au module</span></div><div class="tgrid">'; for(var c=1;c<=5;c++){ h+=tcell(c+'B','1B–5B','≤ 24 V DC / 10 A')+tcell(c+'C','1C–5C','≤ 24 V DC / 10 A'); } h+='</div></div>'; }
-  h+='<div class="pbus"><div class="p1">P1 = L+ g'+o.g+'</div><div class="p2">P2 = M g'+o.g+'</div><div class="ax">AUX bus '+o.aux+(b.aux?'':' (non accessible)')+'</div></div>';
-  h+='</div><div><ul class="wlist">'+m.w.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')+
-    '<li>'+(b.light?'BaseUnit claire : <b>nouveau groupe '+o.g+'</b>, alimenter L+ / M ici (10 A max. pour tout le groupe).':'BaseUnit foncée : alimenté par le groupe '+o.g+' (BaseUnit claire de l\'emplacement '+(o.src+1)+').')+'</li>'+
+  h+='<div class="pbus"><div class="p1">P1 = L+</div><div class="p2">P2 = M</div><div class="ax">AUX'+(b.aux?'':' (non accessible)')+'</div></div></div>';
+  h+='<div><ul class="wlist">'+m.w.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')+
+    '<li>'+(b.light?'BaseUnit claire : nouveau groupe de potentiel, alimenter L+ / M ici.':'BaseUnit foncée : alimentée par le groupe de la BaseUnit claire à gauche.')+'</li>'+
     (b.temp?'<li>BaseUnit A1 : capteur de température intégré (soudure froide des thermocouples).</li>':'')+
-    '<li>Repère couleur : '+esc(m.cc)+' · BaseUnits autorisées : '+m.bu.join(', ')+'.</li></ul>'+
-    '<p class="src">'+esc(m.src)+'</p></div></div></section></div>';
-  return h;
+    '<li>Repère couleur : '+esc(m.cc)+'.</li></ul><p class="src">'+esc(m.src)+'</p></div></div>';
+  o.innerHTML=h; renderRefSP();
 }
-function cardS(sl,i,o,all){
-  var m=o.m; if(!m) return ''; var col=GCOL[(o.g-1)%GCOL.length], tm=o.tm;
-  var h='<div class="card"><section><div class="whd"><span class="gchip" style="background:'+col+'">Groupe '+o.g+'</span><h4>'+(i+1)+' · '+esc(m.n)+'</h4><span class="chip">'+m.ref+'</span><span class="sp"></span><span class="chip ok">tableau Siemens</span></div>';
+function renderRefSP(){
+  $('wRefT').textContent='Toutes les BaseUnits ET 200SP';
+  $('wRef').innerHTML='<thead><tr><th>Type</th><th>Référence</th><th>Désignation</th><th>Teinte</th><th>Bornes</th><th>Bornes supplémentaires</th><th>Pour</th></tr></thead><tbody>'+BUREF.map(function(r){ return '<tr><td><b>'+r[0]+'</b></td><td class="m">'+r[1]+'</td><td class="m">'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td>'+r[5]+'</td><td>'+r[6]+'</td></tr>'; }).join('')+'</tbody>';
+  $('wRefS').innerHTML='Claire (D) = ouvre un groupe de potentiel, P1 / P2 et AUX interrompus vers la gauche. Foncée (B) = prolonge P1 / P2 / AUX du voisin de gauche. Terminer la station par un module serveur. Source : manuel Siemens « ET 200SP BaseUnits », éd. 06/2025 (A5E03727049-AN).';
+}
+/* ---------------- ET 200S ---------------- */
+function renderS(){
+  var m=SBY[st.sm]||null;
+  $('wMods').innerHTML='<div class="wgrp"><b>Module de puissance</b><div class="wchips">'+S.filter(function(x){ return x.pm; }).map(function(x){ return '<button type="button" data-m="'+x.id+'" aria-pressed="'+(x.id===st.sm)+'">'+esc(x.n)+'</button>'; }).join('')+'</div></div>'+
+    '<div class="wgrp"><b>Modules électroniques</b><div class="wchips">'+S.filter(function(x){ return !x.pm; }).map(function(x){ return '<button type="button" data-m="'+x.id+'" aria-pressed="'+(x.id===st.sm)+'">'+esc(x.n)+'</button>'; }).join('')+'</div></div>';
+  $('wBuT').textContent='Module de raccordement (TM)';
+  var keys=m&&m.pm?TMPORD:TMEORD, TBL=m&&m.pm?TMP:TME;
+  if(m&&keys.indexOf(st.stm)<0) st.stm=m.pm?'P-A1':m.tm[0];
+  if(m&&!m.pm&&m.tm.indexOf(st.stm)<0) st.stm=m.tm[0];
+  $('wBus').innerHTML=keys.map(function(k){ var t=TBL[k], ok=!m||m.pm||m.tm.indexOf(k)>=0;
+    return '<button type="button" class="'+(m&&m.pm?'lt':'dk')+'" data-b="'+k+'" aria-pressed="'+(k===st.stm)+'"'+(ok?'':' disabled')+'><span>'+t.n+'</span><small>'+esc(t.d)+'</small></button>'; }).join('');
+  $('wBuH').innerHTML='Un PM-E ouvre un groupe de potentiel : les modules électroniques à sa droite reçoivent L+ / M par les bus de potentiel. Même brochage en vis (S), ressort (C) et Fast Connect (N).';
+  var o=$('wOut');
+  if(!m){ o.innerHTML='<div class="wempty">Choisissez un module : son bornier s\'affiche ici.</div>'; renderRefS(); return; }
+  var tm=TBL[st.stm];
+  var h='<div class="whd"><h4>'+esc(m.n)+'</h4><span class="chip">'+m.ref+'</span><span class="sp"></span><span class="chip ok">tableau Siemens</span></div>';
   h+='<div class="wbody"><div class="tb '+(m.pm?'light':'dark')+'"><div class="tbcap"><span>'+esc(tm.n)+'</span><span>'+esc(tm.ref)+'</span></div><div class="tgrid">';
-  var rows=m.pm?[['2','6'],['3','7'],['A4','A8']]:[['1','5'],['2','6'],['3','7'],['4','8'],['A4','A8'],['A3','A7']];
+  var rows=m.pm?[['2','6'],['3','7'],['A4','A8']]:[['1','5'],['2','6'],['3','7'],['4','8'],['A4','A8'],['A3','A7']], miss=[];
   rows.forEach(function(rw){ rw.forEach(function(k){ var has=tm.has.indexOf(k)>=0, x=m.t[k]||['—',''], d=x[1];
-    if(/^L\+$/.test(x[0])) d=(d?d+' · ':'')+(m.pm?'entrée groupe '+o.g:'bus L+ groupe '+o.g);
-    if(/^M$/.test(x[0])) d=(d?d+' · ':'')+(m.pm?'groupe '+o.g:'bus M groupe '+o.g);
-    if(x[0]==='AUX1') d='AUX1 groupe '+o.aux;
+    if(!m.pm&&/^L\+$/.test(x[0])) d=(d?d+' · ':'')+'bus L+ du PM-E';
+    if(!m.pm&&/^M$/.test(x[0])) d=(d?d+' · ':'')+'bus M du PM-E';
+    if(!has&&!/^(n\.c\.|AUX1)$/.test(x[0])) miss.push(k+' ('+x[0]+')');
     h+=tcell(k,x[0],has?d:'absente sur cette embase',has?'':' absent'); }); });
-  h+='</div><div class="pbus"><div class="p1">L+ g'+o.g+'</div><div class="p2">M g'+o.g+'</div><div class="ax">AUX1 n°'+o.aux+'</div></div></div>';
-  var pmTxt=m.pm?'Module de puissance : ouvre le <b>groupe '+o.g+'</b>. '+esc(tm.d)+'.':(o.pm>=0?'Alimenté par le PM-E de l\'emplacement '+(o.pm+1)+' (bus L+ / M du groupe '+o.g+').':'Aucun PM-E à gauche : module non alimenté.');
-  h+='<div><ul class="wlist">'+m.w.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')+'<li>'+pmTxt+'</li><li>Embase : '+esc(tm.d)+'.</li></ul><p class="src">'+esc(m.src)+'</p></div></div></section></div>';
-  return h;
+  h+='</div></div><div>'+(miss.length?'<div class="note warn" style="margin-top:0">Bornes absentes sur '+esc(tm.n)+' : '+esc(miss.join(', '))+'.</div>':'')+
+    '<ul class="wlist">'+m.w.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')+'<li>Embase : '+esc(tm.d)+'.</li></ul><p class="src">'+esc(m.src)+'</p></div></div>';
+  o.innerHTML=h; renderRefS();
 }
-
-/* ---------- actions ---------- */
-function defaultBu(m,i,list){ var t=m.bu[0]; return (i===0?t+'-D':t+'-B'); }
-$('wAdd').addEventListener('click',function(){ var id=$('wAddSel').value, list=L(), i=list.length;
-  if(st.sys==='sp'){ var m=SPBY[id]; list.push({m:id,bu:defaultBu(m,i,list)}); }
-  else { var m2=SBY[id]; list.push({m:id,tm:m2.pm?'P-A1':m2.tm[0]}); }
-  st.cur=i; persist(); render(); });
-$('wSlots').addEventListener('change',function(e){ var s=e.target.closest('select[data-i]'); if(!s) return; var i=+s.getAttribute('data-i'), f=s.getAttribute('data-f'), list=L(), sl=list[i];
-  sl[f]=s.value;
-  if(f==='m'){ if(st.sys==='sp'){ var m=SPBY[sl.m], b=BU[sl.bu]; if(!b||m.bu.indexOf(b.ty)<0) sl.bu=m.bu[0]+(b&&b.light?'-D':'-B'); }
-    else { var m2=SBY[sl.m]; if(m2.pm){ if(!TMP[sl.tm]) sl.tm='P-A1'; } else if(m2.tm.indexOf(sl.tm)<0) sl.tm=m2.tm[0]; } }
-  st.cur=i; persist(); render(); });
-$('wSlots').addEventListener('click',function(e){ var b=e.target.closest('[data-a]'); var list=L();
-  if(b){ var i=+b.getAttribute('data-i'), a=b.getAttribute('data-a');
-    if(a==='del'){ list.splice(i,1); st.cur=-1; }
-    else if(a==='up'&&i>0){ var t=list[i-1]; list[i-1]=list[i]; list[i]=t; st.cur=i-1; }
-    else if(a==='dn'&&i<list.length-1){ var t2=list[i+1]; list[i+1]=list[i]; list[i]=t2; st.cur=i+1; }
-    persist(); render(); return; }
-  var sl=e.target.closest('[data-slot]'); if(sl&&!e.target.closest('select')){ st.cur=+sl.getAttribute('data-slot'); render(); var c=$('wCards').children[st.cur]; if(c&&c.scrollIntoView) c.scrollIntoView({behavior:'smooth',block:'start'}); } });
-$('wRail').addEventListener('click',function(e){ var sl=e.target.closest('[data-slot]'); if(!sl) return; st.cur=+sl.getAttribute('data-slot'); render(); var c=$('wCards').children[st.cur]; if(c&&c.scrollIntoView) c.scrollIntoView({behavior:'smooth',block:'start'}); });
-$('wSys').addEventListener('click',function(e){ var b=e.target.closest('[data-v]'); if(!b) return; st.sys=b.getAttribute('data-v'); st.cur=-1; persist(); render(); });
-var clrArm=0;
-$('wClear').addEventListener('click',function(){ if(!L().length) return; if(Date.now()-clrArm>3000){ clrArm=Date.now(); this.textContent='Confirmer ?'; var me=this; setTimeout(function(){ me.textContent='Vider la station'; },3000); return; }
-  if(st.sys==='sp') st.sp=[]; else st.s=[]; st.cur=-1; clrArm=0; this.textContent='Vider la station'; persist(); render(); });
-$('wPrint').addEventListener('click',function(){ try{ window.print(); }catch(_){} });
+function renderRefS(){
+  $('wRefT').textContent='Embases ET 200S (modules de raccordement)';
+  $('wRef').innerHTML='<thead><tr><th>Désignation</th><th>Référence (vis)</th><th>Pour</th><th>Bornes / AUX1</th></tr></thead><tbody>'+TMPORD.map(function(k){ var t=TMP[k]; return '<tr><td class="m">'+t.n+'</td><td class="m">'+t.ref+'</td><td>Module de puissance</td><td>'+esc(t.d)+'</td></tr>'; }).join('')+TMEORD.map(function(k){ var t=TME[k]; return '<tr><td class="m">'+t.n+'</td><td class="m">'+t.ref+'</td><td>Module électronique 15 mm</td><td>'+esc(t.d)+'</td></tr>'; }).join('')+'</tbody>';
+  $('wRefS').innerHTML='Références des TM-P : x selon le raccordement (vis, ressort, Fast Connect). Source : manuel Siemens « ET 200S Terminal modules » (ID 25390457).';
+}
+/* ---------------- actions ---------------- */
+$('wSys').addEventListener('click',function(e){ var b=e.target.closest('[data-v]'); if(!b) return; st.sys=b.getAttribute('data-v'); persist(); render(); });
+$('wMods').addEventListener('click',function(e){ var b=e.target.closest('[data-m]'); if(!b) return; if(st.sys==='sp') st.spm=b.getAttribute('data-m'); else st.sm=b.getAttribute('data-m'); persist(); render();
+  if(window.innerWidth<=1100){ var o=$('wBus'); if(o.scrollIntoView) o.scrollIntoView({behavior:'smooth',block:'start'}); } });
+$('wBus').addEventListener('click',function(e){ var b=e.target.closest('[data-b]'); if(!b||b.disabled) return; if(st.sys==='sp') st.spb=b.getAttribute('data-b'); else st.stm=b.getAttribute('data-b'); persist(); render(); });
 render();
 })();
 

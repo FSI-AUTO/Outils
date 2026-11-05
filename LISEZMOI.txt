@@ -1,0 +1,14 @@
+Boîte à outils automaticien — appli installable (iPad, iPhone, PC)
+
+Contenu : index.html (l'appli complète, hors ligne), sw.js (cache hors ligne),
+manifest.webmanifest et icons/ (icône d'écran d'accueil).
+
+1. Mettre ce dossier sur un hébergement HTTPS (Netlify, GitHub Pages, Synology Web Station…).
+   Le HTTPS est obligatoire pour le fonctionnement hors ligne.
+2. Sur l'iPad, ouvrir l'adresse dans Safari, attendre le chargement complet.
+3. Bouton Partager → « Sur l'écran d'accueil » → Ajouter.
+
+Mise à jour : remplacer les fichiers sur l'hébergement. L'appli prend la nouvelle
+version à la prochaine ouverture avec du réseau.
+
+Version : e519a3ef46
