@@ -622,7 +622,7 @@ html.full main.mods{flex:1;min-height:0}
 #m-notes .nkeys button:hover{border-color:var(--sky)}
 #m-notes .nkeys .sp{flex:1}
 #m-notes .ned{position:relative;background:var(--raise);border-radius:0 0 8px 8px;--resw:190px;--lh:26px;--pad:14px}
-#m-notes .ned textarea,#m-notes .ned .lay{font-family:var(--f-mono);font-size:16px;line-height:var(--lh);letter-spacing:0;tab-size:4;
+#m-notes .ned textarea,#m-notes .ned .lay{font-variant-ligatures:none;font-feature-settings:'liga' 0,'calt' 0;font-family:var(--f-mono);font-size:16px;line-height:var(--lh);letter-spacing:0;tab-size:4;
   padding:var(--pad) calc(var(--resw) + 28px) var(--pad) 16px;margin:0;border:0;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal}
 #m-notes .ned textarea{position:relative;z-index:1;display:block;width:100%;min-height:340px;resize:none;background:transparent;color:var(--ink);caret-color:var(--pri);outline:none;overflow:hidden}
 #m-notes .ned textarea::placeholder{color:var(--muted);opacity:.75}
@@ -647,7 +647,7 @@ html.full main.mods{flex:1;min-height:0}
 #m-notes .ned::after{content:"";position:absolute;top:0;bottom:0;right:calc(var(--resw) + 14px);border-left:1px dashed var(--line);pointer-events:none}
 #m-notes .kpad{position:sticky;bottom:env(safe-area-inset-bottom,0px);z-index:5;background:var(--bg);border-top:1px solid var(--line);padding:8px 10px 10px;box-shadow:0 -6px 16px rgba(13,44,79,.06)}
 #m-notes .kpad[hidden]{display:none}
-#m-notes .kstrip{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-height:38px;margin-bottom:8px;align-items:center}
+#m-notes .kstrip{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;height:calc(42px*var(--kf));min-height:calc(42px*var(--kf));margin-bottom:8px;align-items:center}
 #m-notes .kstrip::-webkit-scrollbar{display:none}
 #m-notes .kstrip button{flex:none;display:inline-flex;align-items:baseline;gap:7px;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:7px 12px;cursor:pointer;font:inherit;color:inherit;max-width:320px}
 #m-notes .kstrip button b{font-family:var(--f-mono);font-weight:500;font-size:15px;white-space:nowrap}
@@ -661,7 +661,7 @@ html.full main.mods{flex:1;min-height:0}
   #m-notes .kext{order:1}
   #m-notes .kkw{order:2}
   #m-notes .ksh{order:3}
-  #m-notes .kaz{grid-column:1/-1;order:-1}
+  #m-notes .kaz{order:-1}
 }
 @media (max-width:600px){
   #m-notes .kkw,#m-notes .ksh{grid-column:1/-1}
@@ -696,23 +696,39 @@ html.full main.mods{flex:1;min-height:0}
 #m-notes .ksh{order:1}
 #m-notes .knum{order:2}
 #m-notes .kext{order:3}
-#m-notes .kaz{display:none;order:0;grid-column:span 2;grid-template-columns:repeat(10,minmax(0,1fr))}
-#m-notes .kpad.letters .kaz{display:grid}
-#m-notes .kpad.letters .kkw,#m-notes .kpad.letters .ksh{display:none}
+#m-notes .kaz{display:none;order:0;grid-column:auto;--u:calc((100% - 60px) / 11.5);min-width:0}
+#m-notes .kpad.letters .kaz{display:flex;flex-direction:column;gap:6px}
+#m-notes .kpad.letters .kkw,#m-notes .kpad.letters .ksh,#m-notes .kpad.letters .kext{display:none}
+#m-notes .kpad.letters .kgrid{grid-template-columns:minmax(0,3fr) minmax(0,1fr)!important}
+#m-notes .kpad.letters .knum{grid-template-columns:repeat(3,minmax(0,1fr))}
+#m-notes .kpad.letters .knum .op{display:none}
+#m-notes .kr{display:flex;gap:6px;min-width:0}
+#m-notes .kr button{min-width:0}
+#m-notes .kr .w1{flex:0 0 var(--u)}
+#m-notes .kr .w15{flex:0 0 calc(var(--u) * 1.5 + 3px)}
+#m-notes .kr .w2{flex:0 0 calc(var(--u) * 2 + 6px)}
+#m-notes .kr .w25{flex:0 0 calc(var(--u) * 2.5 + 9px)}
+#m-notes .kr .wf{flex:1 1 0}
+#m-notes .kr .off{margin-left:calc(var(--u) * .5 + 3px)}
 #m-notes .kaz button{font-family:var(--f-ui);font-size:calc(20px*var(--kf));font-weight:500}
 #m-notes .kaz.up button[data-l]{text-transform:uppercase}
 #m-notes .kaz button.kshift.on{background:var(--sky-soft);border-color:var(--sky);color:var(--sky-ink)}
 #m-notes .kaz button.kshift.lock{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
-#m-notes .kaz .kwide3{grid-column:span 3}
-#m-notes .kaz .kspace{grid-column:span 5;font-family:var(--f-ui);font-size:calc(14px*var(--kf));color:var(--muted)}
-#m-notes .kpad .kaz button.fn.ken2{grid-column:span 2;background:var(--pri);border-color:var(--pri);color:var(--pri-ink);font-size:calc(26px*var(--kf))}
+#m-notes .kaz .kspace{font-size:calc(14px*var(--kf));color:var(--muted)}
+#m-notes .kaz button.kabc{font-size:calc(15px*var(--kf))}
+#m-notes .kaz button.karr{font-variant-ligatures:none;font-feature-settings:'liga' 0,'calt' 0;font-weight:700;font-size:calc(17px*var(--kf));background:var(--sky-soft);color:var(--sky-ink)}
+#m-notes .kpad .kaz button.fn.ken2{background:var(--pri);border-color:var(--pri);color:var(--pri-ink);font-size:calc(24px*var(--kf))}
+@media (max-width:600px){
+  #m-notes .kpad.letters .kgrid{grid-template-columns:minmax(0,1fr)!important}
+}
 #m-notes .kpad.kbmode .kaz{display:none!important}
 #m-notes .kpad.kbmode .knum,#m-notes .kpad.kbmode .kext{display:none}
 #m-notes .kpad.kbmode .kgrid{grid-template-columns:minmax(0,1fr)!important}
 #m-notes .kpad.kbmode .ksh,#m-notes .kpad.kbmode .kkw{grid-template-columns:repeat(auto-fill,minmax(calc(68px*var(--kf)),1fr))}
 #m-notes .kpad.kbmode .kb button{height:calc(var(--kh)*.82)}
 #m-notes .kpad.dock{position:fixed;left:0;right:0;bottom:auto;z-index:40;max-height:48vh;overflow:auto;box-shadow:0 -6px 20px rgba(8,22,40,.2)}
-#m-notes .kstrip button{min-height:calc(38px*var(--kf))}
+#m-notes .kstrip button{height:calc(38px*var(--kf));min-height:0;align-items:center}
+#m-notes .kstrip .hint0{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #m-notes .kstrip button b{font-size:calc(15px*var(--kf))!important}
 #m-notes .ned .tk.kwc{background:rgba(180,83,9,.28);font-weight:700}
 #m-notes .ned .tk.kwo{background:rgba(31,122,77,.24);font-weight:700}
@@ -1138,6 +1154,9 @@ html.full main.mods{flex:1;min-height:0}
 #m-logic .nin{width:110px;height:40px;border:1px solid var(--line);background:var(--raise);border-radius:8px;padding:0 8px;font-family:var(--f-mono);font-size:15px;text-align:right;color:inherit}
 #m-logic .nin:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px var(--sky-soft)}
 #m-logic .nin.bad{border-color:var(--warn);background:var(--warn-soft)}
+#m-logic .nin.pend{border-color:var(--warn);border-style:dashed;box-shadow:0 0 0 3px var(--warn-soft)}
+#m-logic .ninh{display:none;font-size:11.5px;color:var(--warn);font-weight:600;white-space:nowrap}
+#m-logic .io.pend .ninh{display:inline}
 #m-logic .pm{width:34px;height:40px;border-radius:8px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:18px;color:inherit}
 #m-logic .lamp{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:var(--raise);flex:none}
 #m-logic .lamp.on{background:var(--ok);border-color:var(--ok);box-shadow:0 0 0 4px var(--ok-soft)}
@@ -1672,11 +1691,11 @@ html.full main.mods{flex:1;min-height:0}
             <button type="button" data-w="ALARME" class="lg">ALARME</button><button type="button" data-w="DÉFAUT" class="lg">DÉFAUT</button><button type="button" data-w="FAIT" class="g">FAIT</button><button type="button" data-w="IHM">IHM</button><button type="button" data-w="ET">ET</button><button type="button" data-w="OU">OU</button>
           </div>
           <div class="kb kaz" id="nbAz">
-            <button type="button" data-l="a">a</button><button type="button" data-l="z">z</button><button type="button" data-l="e">e</button><button type="button" data-l="r">r</button><button type="button" data-l="t">t</button><button type="button" data-l="y">y</button><button type="button" data-l="u">u</button><button type="button" data-l="i">i</button><button type="button" data-l="o">o</button><button type="button" data-l="p">p</button>
-            <button type="button" data-l="q">q</button><button type="button" data-l="s">s</button><button type="button" data-l="d">d</button><button type="button" data-l="f">f</button><button type="button" data-l="g">g</button><button type="button" data-l="h">h</button><button type="button" data-l="j">j</button><button type="button" data-l="k">k</button><button type="button" data-l="l">l</button><button type="button" data-l="m">m</button>
-            <button type="button" data-k="shift" class="fn kshift" aria-label="Majuscule" id="nbShift">⇧</button><button type="button" data-l="w">w</button><button type="button" data-l="x">x</button><button type="button" data-l="c">c</button><button type="button" data-l="v">v</button><button type="button" data-l="b">b</button><button type="button" data-l="n">n</button><button type="button" data-l="'">'</button><button type="button" data-l="-">-</button><button type="button" data-k="bs" class="fn" aria-label="Effacer">⌫</button>
-            <button type="button" data-l="é">é</button><button type="button" data-l="è">è</button><button type="button" data-l="à">à</button><button type="button" data-l="ç">ç</button><button type="button" data-l="ù">ù</button><button type="button" data-l=":">:</button><button type="button" data-l=";">;</button><button type="button" data-l="?">?</button><button type="button" data-l="!">!</button><button type="button" data-l="@">@</button>
-            <button type="button" data-k="letters" class="fn kabc kwide3">S7 · mots</button><button type="button" data-i=" " class="kspace" aria-label="Espace">espace</button><button type="button" data-k="nl" class="fn ken2" aria-label="Nouvelle ligne">↵</button>
+            <div class="kr"><button type="button" data-l="a" class="w1">a</button><button type="button" data-l="z" class="w1">z</button><button type="button" data-l="e" class="w1">e</button><button type="button" data-l="r" class="w1">r</button><button type="button" data-l="t" class="w1">t</button><button type="button" data-l="y" class="w1">y</button><button type="button" data-l="u" class="w1">u</button><button type="button" data-l="i" class="w1">i</button><button type="button" data-l="o" class="w1">o</button><button type="button" data-l="p" class="w1">p</button><button type="button" data-k="bs" class="fn w15" aria-label="Effacer">⌫</button></div>
+            <div class="kr"><button type="button" data-l="q" class="w1 off">q</button><button type="button" data-l="s" class="w1">s</button><button type="button" data-l="d" class="w1">d</button><button type="button" data-l="f" class="w1">f</button><button type="button" data-l="g" class="w1">g</button><button type="button" data-l="h" class="w1">h</button><button type="button" data-l="j" class="w1">j</button><button type="button" data-l="k" class="w1">k</button><button type="button" data-l="l" class="w1">l</button><button type="button" data-l="m" class="w1">m</button><button type="button" data-k="nl" class="fn ken2 wf" aria-label="Nouvelle ligne">↵</button></div>
+            <div class="kr"><button type="button" data-k="shift" class="fn kshift w15" aria-label="Majuscule" id="nbShift">⇧</button><button type="button" data-l="w" class="w1">w</button><button type="button" data-l="x" class="w1">x</button><button type="button" data-l="c" class="w1">c</button><button type="button" data-l="v" class="w1">v</button><button type="button" data-l="b" class="w1">b</button><button type="button" data-l="n" class="w1">n</button><button type="button" data-l="'" class="w1">'</button><button type="button" data-l="," class="w1">,</button><button type="button" data-l="." class="w1">.</button><button type="button" data-l="-" class="w1">-</button></div>
+            <div class="kr"><button type="button" data-l="é" class="w1">é</button><button type="button" data-l="è" class="w1">è</button><button type="button" data-l="à" class="w1">à</button><button type="button" data-l="ç" class="w1">ç</button><button type="button" data-l="ù" class="w1">ù</button><button type="button" data-l=":" class="w1">:</button><button type="button" data-l=";" class="w1">;</button><button type="button" data-l="?" class="w1">?</button><button type="button" data-l="!" class="w1">!</button><button type="button" data-l="@" class="w1">@</button><button type="button" data-w=" =&gt; " class="karr w15" aria-label="Flèche =>">=&gt;</button></div>
+            <div class="kr"><button type="button" data-k="letters" class="fn kabc w25">S7 · mots</button><button type="button" data-k="left" class="fn w1" aria-label="Curseur à gauche">←</button><button type="button" data-i=" " class="kspace wf" aria-label="Espace">espace</button><button type="button" data-k="right" class="fn w1" aria-label="Curseur à droite">→</button><button type="button" data-k="nl" class="fn ken2 w2" aria-label="Nouvelle ligne">↵</button></div>
           </div>
           <div class="kb knum">
             <button type="button" data-i="7">7</button><button type="button" data-i="8">8</button><button type="button" data-i="9">9</button><button type="button" data-i="/" class="op">÷</button>
@@ -6785,8 +6804,8 @@ function renderIO(){
   $('lgIn').innerHTML=ins.length?ins.map(function(v){
     var ctl;
     if(v.type==='bool'){ var push=st.mode[v.key]==='push'; ctl='<button type="button" class="sw" data-k="'+esc(v.key)+'" aria-pressed="false">0</button><button type="button" class="md" data-m="'+esc(v.key)+'" aria-pressed="'+push+'" title="'+(push?'Bouton poussoir : 1 tant qu\'on appuie':'Interrupteur : chaque clic inverse')+'">'+(push?'◉':'⇄')+'</button>'; }
-    else ctl='<button type="button" class="pm" data-d="-1" data-k="'+esc(v.key)+'" aria-label="Diminuer">−</button><input class="nin" data-k="'+esc(v.key)+'" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="'+esc(v.name)+'"><button type="button" class="pm" data-d="1" data-k="'+esc(v.key)+'" aria-label="Augmenter">+</button>';
-    return '<div class="io"><div class="nm"><b title="'+esc(v.name)+'">'+esc(v.name)+'</b><small>'+typeLbl(v.type)+(v.type==='bool'?(st.mode[v.key]==='push'?' · poussoir':' · interrupteur'):'')+'</small></div><div class="ctl">'+ctl+'</div></div>'; }).join('')
+    else ctl='<button type="button" class="pm" data-d="-1" data-k="'+esc(v.key)+'" aria-label="Diminuer">−</button><input class="nin" data-k="'+esc(v.key)+'" inputmode="decimal" enterkeyhint="done" autocomplete="off" spellcheck="false" aria-label="'+esc(v.name)+'" title="Entrée ou toucher ailleurs pour appliquer"><button type="button" class="pm" data-d="1" data-k="'+esc(v.key)+'" aria-label="Augmenter">+</button>';
+    return '<div class="io"><div class="nm"><b title="'+esc(v.name)+'">'+esc(v.name)+'</b><small>'+typeLbl(v.type)+(v.type==='bool'?(st.mode[v.key]==='push'?' · poussoir':' · interrupteur'):'')+'</small></div><div class="ctl">'+(v.type==='bool'?'':'<span class="ninh">↵ appliquer</span>')+ctl+'</div></div>'; }).join('')
     :'<p class="none">'+(C?'Aucune entrée : toutes les variables sont écrites par le programme.':'Les variables seulement lues par le programme apparaissent ici, pour les piloter.')+'</p>';
   $('lgOut').innerHTML=outs.length?outs.map(function(v){ return '<div class="io"><div class="nm"><b title="'+esc(v.name)+'">'+esc(v.name)+'</b><small>'+typeLbl(v.type)+(v.role==='mem'?' · relue par le programme':'')+'</small></div><div class="ctl">'+(v.type==='bool'?'<span class="lamp" data-o="'+esc(v.key)+'"></span>':'')+'<span class="val" data-v="'+esc(v.key)+'"></span></div></div>'; }).join('')
     :'<p class="none">'+(C?'Aucune sortie.':'Les variables écrites par le programme apparaissent ici.')+'</p>';
@@ -6817,10 +6836,19 @@ $('lgIn').addEventListener('click',function(e){
 $('lgIn').addEventListener('pointerdown',function(e){ var b=e.target.closest('.sw'); if(!b) return; var k=b.getAttribute('data-k'); if(st.mode[k]!=='push') return; e.preventDefault(); pushing=k; try{ b.setPointerCapture(e.pointerId); }catch(_){} S.vals[k]=true; tick(0,true); });
 function release(){ if(pushing&&S){ S.vals[pushing]=false; pushing=null; tick(0,true); } }
 $('lgIn').addEventListener('pointerup',release); $('lgIn').addEventListener('pointercancel',release); $('lgIn').addEventListener('lostpointercapture',release);
-$('lgIn').addEventListener('input',function(e){ var i=e.target.closest('.nin'); if(!i) return; var k=i.getAttribute('data-k'), t=C.vars[k].type, v;
-  if(t==='time') v=/^\d+$/.test(i.value.trim())?+i.value.trim():PLC.parseTime(i.value.trim()); else v=parseFloat(String(i.value).replace(',','.'));
-  var ok=isFinite(v); i.classList.toggle('bad',!ok&&i.value.trim()!==''); if(ok){ if(t==='int') v=Math.trunc(v); setInput(k,v); } });
-$('lgIn').addEventListener('focusout',function(e){ if(e.target.closest('.nin')) syncIO(true); });
+/* valeur numérique : appliquée seulement sur Entrée ou en quittant le champ (taper 60 ne teste pas 6 d'abord) */
+function ninParse(i){ var k=i.getAttribute('data-k'), t=C.vars[k].type, raw=i.value.trim(), v;
+  if(t==='time') v=/^\d+$/.test(raw)?+raw:PLC.parseTime(raw); else v=parseFloat(raw.replace(',','.'));
+  if(isFinite(v)&&t==='int') v=Math.trunc(v); return {k:k,v:v,ok:isFinite(v)&&raw!==''}; }
+function ninPend(i,on){ i.classList.toggle('pend',on); var io=i.closest('.io'); if(io) io.classList.toggle('pend',on); }
+function ninApply(i){ if(!C||!S) return; var r=ninParse(i); ninPend(i,false); if(r.ok){ i.classList.remove('bad'); setInput(r.k,r.v); } syncIO(true); }
+$('lgIn').addEventListener('input',function(e){ var i=e.target.closest('.nin'); if(!i||!C) return; var r=ninParse(i);
+  i.classList.toggle('bad',!r.ok&&i.value.trim()!==''); ninPend(i,r.ok&&r.v!==S.vals[r.k]); });
+$('lgIn').addEventListener('keydown',function(e){ var i=e.target.closest('.nin'); if(!i) return;
+  if(e.key==='Enter'){ e.preventDefault(); ninApply(i); i.select(); }
+  else if(e.key==='Escape'){ e.preventDefault(); ninPend(i,false); i.classList.remove('bad'); i.value=fmtV(S.vals[i.getAttribute('data-k')],C.vars[i.getAttribute('data-k')].type); }
+  else if(e.key==='ArrowUp'||e.key==='ArrowDown'){ e.preventDefault(); var k=i.getAttribute('data-k'), t=C.vars[k].type, step=t==='real'?0.1:t==='time'?100:1, nv=(+S.vals[k]||0)+(e.key==='ArrowUp'?step:-step); if(t==='real') nv=+nv.toFixed(6); setInput(k,nv); i.value=fmtV(nv,t); ninPend(i,false); } });
+$('lgIn').addEventListener('focusout',function(e){ var i=e.target.closest('.nin'); if(i) ninApply(i); });
 
 /* ---------- cycle ---------- */
 function tick(dt,force){
